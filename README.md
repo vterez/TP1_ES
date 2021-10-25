@@ -15,7 +15,7 @@ Nele, há duas utilidades principais, detalhadas a seguir.
 
 ### Gerenciamento de disciplinas
 
-É possível cadastrar as disciplinas que estão sendo cursadas, bem como diversas informações específicas de cada uma, como:
+É possível cadastrar as disciplinas que estão sendo cursadas, bem como diversas adicionar e visualizar informações específicas de cada uma, como:
 
 * Dados gerais do docente, como nome, email e sala.
 * Dados da disciplina, como horários e sala.
