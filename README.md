@@ -1,7 +1,7 @@
 # TP1_ES
 
-Marco Túlio Machado França - 2016045820
-João Pedro Macedo Oliveira - 2019006779
+* Marco Túlio Machado França - 2016045820
+* João Pedro Macedo Oliveira - 2019006779
 
 Neste projeto, desenvolvemos um sistema de gerenciamento de avaliações para estudantes. 
 
