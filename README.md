@@ -17,8 +17,8 @@ Nele, há duas utilidades principais, detalhadas a seguir.
 
 É possível cadastrar as disciplinas que estão sendo cursadas, bem como diversas informações específicas de cada uma, como:
 
-* Dados gerais do docente, como nome e email.
-* Dados da disciplina, como horários e local.
+* Dados gerais do docente, como nome, email e sala.
+* Dados da disciplina, como horários e sala.
 * Atividades que serão desenvolvidas ao longo do curso, juntamente com materiais didáticos referentes a cada avaliação.
 * Histórico de notas na disciplina, que é ligado ao item anterior para manter o registro de resultados obtidos sempre atualizado.
 
