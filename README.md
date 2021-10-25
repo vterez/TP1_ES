@@ -1,9 +1,13 @@
 # TP1_ES
 
-* Marco Túlio Machado França - 2016045820
-* João Pedro Macedo Oliveira - 2019006779
-
 Neste projeto, desenvolvemos um sistema de gerenciamento de avaliações para estudantes. 
+
+## Membros do grupo
+
+* João Pedro Macedo Oliveira - 2019006779
+* Lucas Augusto Silva Gonçalves - 
+* Marco Túlio Machado França - 2016045820
+* Vitor Terra Rezende - 2019041663
 
 ## Funcionalidades
 
