@@ -22,7 +22,7 @@ Uma agenda que mostra as atividades que estão por vir e que emite lembretes que
 
 * Back-end: desenvolvido na linguagem Python, utilizando o framework Django.
 * Banco de dados: utilizamos o banco SQLite, que é bem integrado ao Django.
-* Front-end: desenvolvido utilizando o framework Angular.
+* Front-end: desenvolvido utilizando o framework React JS.
 
 ## Execução
 
