@@ -5,7 +5,7 @@ Neste projeto, desenvolvemos um sistema de gerenciamento de avaliações e disci
 ## Membros do grupo
 
 * João Pedro Macedo Oliveira - 2019006779
-* Lucas Augusto Silva Gonçalves - 
+* Lucas Augusto Silva Gonçalves - 2019006884
 * Marco Túlio Machado França - 2016045820
 * Vitor Terra Rezende - 2019041663
 
