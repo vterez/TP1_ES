@@ -32,3 +32,10 @@ Uma agenda que mostra as atividades que estão por vir e que emite lembretes que
 * Banco de dados: utilizamos o banco SQLite, que é bem integrado ao Django.
 * Front-end: desenvolvido utilizando o framework React JS.
 
+## Objetivo da sprint
+
+Criar uma interface básica, em que é possível criar, consultar, editar e remover discipinas e atividades.
+
+## Tarefas da sprint
+
+Definidos nos 'Projects' desse repositório, separados entre [frontend](https://github.com/vterez/TP1_ES/projects/2) e [backend](https://github.com/vterez/TP1_ES/projects/1).
