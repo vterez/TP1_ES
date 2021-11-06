@@ -38,4 +38,6 @@ Criar uma interface básica, em que é possível criar, consultar, editar e remo
 
 ## Tarefas da sprint
 
-Definidos nos 'Projects' desse repositório, separados entre [frontend](https://github.com/vterez/TP1_ES/projects/2) e [backend](https://github.com/vterez/TP1_ES/projects/1).
+Definidos nos 'Projects' desse repositório:
+* [frontend](https://github.com/vterez/TP1_ES/projects/2): quadro de tarefas de frontend, que será implementado por João e Lucas.
+* [backend](https://github.com/vterez/TP1_ES/projects/1): quadro de tarefas de backend e de banco de dados, que será implementado por Marco e Vitor.
