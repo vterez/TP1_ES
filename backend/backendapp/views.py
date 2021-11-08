@@ -10,5 +10,5 @@ def TelaLogin(request):
     return JsonResponse (meudict) #retorna o dicionário em formato Json
 
 def TelaDisciplinas(request):
-    meudict = {"nome":"marco","disciplina":"es"}
+    meudict = {"nome":"marco","disciplina":"esoft"}
     return JsonResponse (meudict)
