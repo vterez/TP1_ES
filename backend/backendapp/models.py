@@ -27,8 +27,8 @@ class Disciplina(models.Model):
 class Atividade(models.Model):
     id_disciplina = models.ForeignKey(Disciplina, on_delete = models.CASCADE)
     nome = models.CharField(max_length = 100)
-    valor = models.DecimalField(max_digits = 5)
-    nota = models.DecimalField(max_digits = 5)
+    valor = models.DecimalField(max_digits = 5, decimal_places = 2)
+    nota = models.DecimalField(max_digits = 5, decimal_places = 2)
     data = models.DateTimeField(auto_now = True)
     conteudo = models.CharField(max_length = 255)
 
