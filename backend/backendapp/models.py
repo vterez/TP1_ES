@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 class Usuario(models.Model):
-    login = models.CharField(max_length = 30, primary_key=True)
+    login = models.CharField(max_length = 30, unique = True)
     nome = models.CharField(max_length = 100, blank = False)
     email = models.EmailField(blank = True, null = True)
     senha = models.CharField(max_length = 30, blank = False, null = False)
@@ -29,7 +29,8 @@ class Atividade(models.Model):
     nota = models.DecimalField(max_digits = 5, decimal_places = 2, blank = True, null = True)
     data = models.DateTimeField(null=True, blank = True)
     conteudos = models.CharField(max_length = 255, blank = True, null = True)
-    
+    lembrete = models.IntegerField(null = True, blank = True)
+
     def __str__(self):
         return self.nome
         

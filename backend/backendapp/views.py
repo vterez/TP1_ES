@@ -25,6 +25,7 @@ def Login(request):
         else:
             return_dict["sucesso"] = True
             return_dict["nome"] = usuario.nome
+            return_dict["id"] = usuario.id
                 
     except Usuario.DoesNotExist:
         erros.append("Usuário não cadastrado")
@@ -69,9 +70,12 @@ def CadastroDisciplina(request):
     try:
         form = DisciplinaForm(request.POST)
         if form.is_valid():
-            disciplina = form.save()
-            return_dict["sucesso"] = True
-            return_dict["disciplina_id"] = disciplina.id
+            if form.cleaned_data['nome'] in [x[0] for x in Usuario.objects.get(pk=request.POST['usuario']).disciplinas.values_list('nome')]:
+                erros.append("Já existe uma disciplina com esse nome para o usuário informado")
+            else:
+                disciplina = form.save()
+                return_dict["sucesso"] = True
+                return_dict["id"] = disciplina.id
         else:
             erros.append(form.errors)
     
@@ -83,17 +87,19 @@ def CadastroDisciplina(request):
     return return_dict
 
 @acerta_tipo("GET")
-def ListaDisciplinas(request):
+def ListaDisciplinas(request,user):
     return_dict = {"sucesso":False}
     erros = []
 
     try:
-        id = request.GET['login']
-        disciplinas = Disciplina.objects.filter(usuario__login = id).values('id','nome')
+        disciplinas = list(Disciplina.objects.filter(usuario__id = user).values('id','nome'))
         #usuario = Usuario.objects.get(pk=id)
         #disciplinas = usuario.disciplinas.values('id','nome')
-        return_dict["disciplinas"] = list(disciplinas)
-        return_dict["sucesso"] = True
+        if disciplinas:
+            return_dict["disciplinas"] = list(disciplinas)
+            return_dict["sucesso"] = True
+        else:
+            erros.append("Não existe usuário com esse id")
 
     except Exception as ex:
         erros.append(str(ex))
