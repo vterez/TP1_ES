@@ -23,7 +23,6 @@ def Login(request):
         if usuario.senha != senha_cripto:
             erros.append("Senha incorreta")
         else:
-            return_dict["sucesso"] = True
             return_dict["nome"] = usuario.nome
             return_dict["id"] = usuario.id
                 
@@ -37,7 +36,9 @@ def Login(request):
         erros.append(str(ex))
 
     if erros:
-        return_dict["erros"] = erros  
+        return_dict["erros"] = erros 
+    else:
+        return_dict["sucesso"] = True 
     return return_dict #retorna o dicionário em formato Json
 
 @acerta_tipo("POST")
@@ -51,7 +52,6 @@ def CadastroUsuario(request):
             usuario = form.save(commit=False)
             usuario.senha = str(khash(usuario.senha.encode('utf8')).hexdigest())[:30]
             usuario.save()
-            return_dict["sucesso"] = True
         else:
             erros.append(form.errors)
     
@@ -60,6 +60,8 @@ def CadastroUsuario(request):
 
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("POST")
@@ -74,7 +76,6 @@ def CadastroDisciplina(request):
                 erros.append("Já existe uma disciplina com esse nome para o usuário informado")
             else:
                 disciplina = form.save()
-                return_dict["sucesso"] = True
                 return_dict["id"] = disciplina.id
         else:
             erros.append(form.errors)
@@ -84,6 +85,8 @@ def CadastroDisciplina(request):
 
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("GET")
@@ -97,7 +100,6 @@ def ListaDisciplinas(request,user):
         #disciplinas = usuario.disciplinas.values('id','nome')
         if disciplinas:
             return_dict["disciplinas"] = list(disciplinas)
-            return_dict["sucesso"] = True
         else:
             erros.append("Não existe usuário com esse id")
 
@@ -106,6 +108,8 @@ def ListaDisciplinas(request,user):
     
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("GET")
@@ -115,7 +119,6 @@ def InfosDisciplina(request,disc):
 
     try:
         disciplina = Disciplina.objects.get(id=disc)
-        return_dict["sucesso"] = True
         return_dict["disciplina"] = model_to_dict(disciplina)
         atividades = Atividade.objects.filter(disciplina__id=disc).values('id','nome','data')
         return_dict["atividades"] = list(atividades)
@@ -128,6 +131,8 @@ def InfosDisciplina(request,disc):
 
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("PATCH")
@@ -137,17 +142,18 @@ def AtualizaDisciplina(request,disc):
 
     try:
         dados = QueryDict(request.body)
-        disciplina = Disciplina.objects.get(id=disc)
-        post = copy(dados)
-        for k,v in model_to_dict(disciplina).items():
-            if k not in dados: post[k] = v
-        
-        form = DisciplinaForm(post,instance=disciplina)
-        if form.is_valid():
-            form.save()
-            return_dict["sucesso"] = True
+        if 'usuario' in dados:
+            erros.append('Não é possível alterar o usuário que possui a disciplina')
         else:
-            erros.append(form.errors)
+            disciplina = Disciplina.objects.get(id=disc)
+            post = copy(dados)
+            for k,v in model_to_dict(disciplina).items():
+                if k not in dados: post[k] = v
+            form = DisciplinaForm(post,instance=disciplina)
+            if form.is_valid():
+                form.save()
+            else:
+                erros.append(form.errors)
 
     except Disciplina.DoesNotExist:
         erros.append("Não existe disciplina com o código informado")  
@@ -157,6 +163,8 @@ def AtualizaDisciplina(request,disc):
 
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("DELETE")
@@ -170,11 +178,15 @@ def DeletaDisciplina(request,disc):
             raise Exception("Autenticação inválida")
         disciplina = Disciplina.objects.get(id=disc)
         disciplina.delete()
-        return_dict["sucesso"] = True
+    
+    except Disciplina.DoesNotExist:
+        erros.append("Não existe disciplina com o código informado")  
     
     except Exception as ex:
         erros.append(str(ex))
 
     if erros:
         return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
     return return_dict
