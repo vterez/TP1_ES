@@ -73,7 +73,7 @@ def CadastroDisciplina(request):
         form = DisciplinaForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['nome'] in [x[0] for x in Usuario.objects.get(pk=request.POST['usuario']).disciplinas.values_list('nome')]:
-                erros.append("Já existe uma disciplina com esse nome para o usuário informado")
+                erros.append("Já existe uma disciplina com esse nome para o usuário informado.")
             else:
                 disciplina = form.save()
                 return_dict["id"] = disciplina.id
