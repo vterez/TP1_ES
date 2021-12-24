@@ -70,17 +70,17 @@ const NavMenu = styled.nav`
 const Topbar = ({ openSidebar }) => {
   const auth = useContext(AuthContext);
 
+  if (!auth.isLoggedIn) return null;
+
   return (
     <Header>
-      {auth.isLoggedIn && <Bars onClick={openSidebar} />}
+      <Bars onClick={openSidebar} />
 
-      {auth.isLoggedIn && (
-        <NavMenu>
-          <Link to="/disciplinas">Disciplinas</Link>
-          <Link to="/atividades">Atividades</Link>
-          <AuthBtn onClick={auth.logout}>Logout</AuthBtn>
-        </NavMenu>
-      )}
+      <NavMenu>
+        <Link to="/disciplinas">Disciplinas</Link>
+        <Link to="/atividades">Atividades</Link>
+        <AuthBtn onClick={auth.logout}>Logout</AuthBtn>
+      </NavMenu>
     </Header>
   );
 };

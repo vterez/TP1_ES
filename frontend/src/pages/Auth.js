@@ -1,13 +1,132 @@
-// Página para login
-import React from "react";
+import React, { useContext, useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import styled from "styled-components";
 
-import TempAuthForm from "../components/TempAuthForm";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { AuthContext } from "../shared/context/AuthContext";
+
+const AuthBg = styled.div`
+  background-color: var(--main-color-400);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FormWrapper = styled.div`
+  background-color: var(--main-color-100);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  max-width: 60rem;
+`;
+
+const Switch = styled.button`
+  font-size: 1.4rem;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-link);
+  margin: 2rem auto 0 auto;
+`;
 
 const Auth = () => {
+  const auth = useContext(AuthContext);
+  const [signup, setSignup] = useState(false);
+
+  const signupSwitch = () => {
+    setSignup((prev) => !prev);
+  };
+
   return (
-    <div>
-      <TempAuthForm />
-    </div>
+    <AuthBg>
+      <Formik
+        initialValues={{
+          login: "",
+          senha: "",
+          email: "",
+          nome: "",
+        }}
+        validationSchema={Yup.object({
+          login: Yup.string()
+            .min(5, "Usuário deve ter pelo menos 5 caracteres")
+            .max(30, "Usuário deve ter no máximo 30 caracteres")
+            .required("Usuário não pode estar vazio"),
+          senha: Yup.string()
+            .min(5, "Senha deve ter pelo menos 5 caracteres")
+            .max(30, "Senha deve ter no máximo 30 caracteres")
+            .required("Senha não pode estar vazio"),
+          email: signup
+            ? Yup.string()
+                .email("Email deve ser um email válido")
+                .max(50, "Email deve ter no máximo 50 caracteres")
+                .required("Email não pode estar vazio")
+            : Yup.string(),
+
+          nome: signup
+            ? Yup.string()
+                .min(2, "Nome deve ter pelo menos 2 caracteres")
+                .max(100, "Nome deve ter no máximo 100 caracteres")
+            : Yup.string(),
+        })}
+        onSubmit={(values) => {
+          const encode = (data) => {
+            return Object.entries(data)
+              .reduce((acc, [key, val]) => {
+                if (typeof val === "string" && val !== "") {
+                  const encoded =
+                    encodeURIComponent(key) + "=" + encodeURIComponent(val);
+                  acc.push(encoded);
+                }
+                return acc;
+              }, [])
+              .join("&");
+          };
+
+          const address = signup ? "cadastro/usuario" : "login";
+          fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: encode(values),
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              if (res["sucesso"]) {
+                auth.login();
+              }
+            })
+            .catch((err) => {
+              //  TODO: Remover. Autenticação temporária até o erro CORS do backend ser resolvido
+              auth.login();
+              console.log(err);
+            });
+        }}
+      >
+        <Form>
+          <FormWrapper>
+            <Input name="login" label="Usuário" />
+            <Input name="senha" type="password" label="Senha" />
+            {signup && (
+              <>
+                <Input name="email" label="Email" />
+                <Input name="nome" label="Nome" />
+              </>
+            )}
+            <Button color="green" type="submit">
+              {signup ? "Cadastrar" : "Login"}
+            </Button>
+            <Switch type="button" onClick={signupSwitch}>
+              {signup ? "Login" : "Cadastrar"}
+            </Switch>
+          </FormWrapper>
+        </Form>
+      </Formik>
+    </AuthBg>
   );
 };
 
