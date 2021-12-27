@@ -72,9 +72,10 @@ const Auth = () => {
             ? Yup.string()
                 .min(2, "Nome deve ter pelo menos 2 caracteres")
                 .max(100, "Nome deve ter no máximo 100 caracteres")
+                .required("Email não pode estar vazio")
             : Yup.string(),
         })}
-        onSubmit={(values) => {
+        onSubmit={(values, actions) => {
           const encode = (data) => {
             return Object.entries(data)
               .reduce((acc, [key, val]) => {
@@ -97,12 +98,25 @@ const Auth = () => {
             .then((res) => res.json())
             .then((res) => {
               if (res["sucesso"]) {
-                auth.login();
+                if (signup) {
+                  setSignup(false);
+                } else {
+                  auth.login();
+                }
+              } else {
+                if (signup) {
+                  if (res?.erros?.[0]?.nome)
+                    actions.setFieldError("nome", res.erros[0].nome);
+                  if (res?.erros?.[0]?.senha)
+                    actions.setFieldError("senha", res.erros[0].senha);
+                  if (res?.erros?.[0]?.login)
+                    actions.setFieldError("login", res.erros[0].login);
+                } else {
+                  actions.setFieldError("login", "Usuário ou senha incorretos");
+                }
               }
             })
             .catch((err) => {
-              //  TODO: Remover. Autenticação temporária até o erro CORS do backend ser resolvido
-              auth.login();
               console.log(err);
             });
         }}
