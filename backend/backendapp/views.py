@@ -89,13 +89,38 @@ def CadastroDisciplina(request):
         return_dict["sucesso"] = True
     return return_dict
 
+@acerta_tipo("POST")
+def CadastroAtividade(request):
+    return_dict = {"sucesso":False}
+    erros = []
+
+    try:
+        form = AtividadeForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['nome'] in [x[0] for x in Disciplina.objects.get(pk=request.POST['disciplina']).atividades.values_list('nome')]:
+                erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
+            else:
+                atividade = form.save()
+                return_dict["id"] = atividade.id
+        else:
+            erros.append(form.errors)
+    
+    except Exception as ex:
+        erros.append(str(ex))
+
+    if erros:
+        return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
+    return return_dict
+
 @acerta_tipo("GET")
 def ListaDisciplinas(request,user):
     return_dict = {"sucesso":False}
     erros = []
 
     try:
-        disciplinas = list(Disciplina.objects.filter(usuario__id = user).values('id','nome'))
+        disciplinas = Disciplina.objects.filter(usuario__id = user).values('id','nome')
         #usuario = Usuario.objects.get(pk=id)
         #disciplinas = usuario.disciplinas.values('id','nome')
         if disciplinas:
@@ -112,6 +137,7 @@ def ListaDisciplinas(request,user):
         return_dict["sucesso"] = True
     return return_dict
 
+
 @acerta_tipo("GET")
 def InfosDisciplina(request,disc):
     return_dict = {"sucesso":False}
@@ -125,6 +151,26 @@ def InfosDisciplina(request,disc):
 
     except Disciplina.DoesNotExist:
         erros.append("Não existe disciplina com o código informado")  
+
+    except Exception as ex:
+        erros.append(str(ex))
+
+    if erros:
+        return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
+    return return_dict
+
+@acerta_tipo("GET")
+def InfosAtividade(request, atividade):
+    return_dict = {"sucesso":False}
+    erros = []
+
+    try:
+        atividade = Atividade.objects.get(id = atividade)
+        return_dict["atividade"] = model_to_dict(atividade)
+    except Atividade.DoesNotExist:
+        erros.append("Não existe atividade com o código informado")  
 
     except Exception as ex:
         erros.append(str(ex))

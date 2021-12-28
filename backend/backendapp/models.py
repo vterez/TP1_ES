@@ -23,7 +23,7 @@ class Disciplina(models.Model):
         return self.nome
 
 class Atividade(models.Model):
-    disciplina = models.ForeignKey(Disciplina, on_delete = models.CASCADE)
+    disciplina = models.ForeignKey(Disciplina, on_delete = models.CASCADE, related_name = 'atividades')
     nome = models.CharField(max_length = 100)
     valor = models.DecimalField(max_digits = 5, decimal_places = 2, blank = True, null = True)
     nota = models.DecimalField(max_digits = 5, decimal_places = 2, blank = True, null = True)
