@@ -6,24 +6,8 @@ import styled from "styled-components";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-
-const AuthBg = styled.div`
-  background-color: var(--main-color-400);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const FormWrapper = styled.div`
-  background-color: var(--main-color-100);
-  border-radius: 1rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  width: 80vw;
-  max-width: 60rem;
-`;
+import { FormBg, FormWrapper } from "../components/Form.styles";
+import { encode } from "../shared/utils/encodeUrl";
 
 const Switch = styled.button`
   font-size: 1.4rem;
@@ -44,7 +28,7 @@ const Auth = () => {
   };
 
   return (
-    <AuthBg>
+    <FormBg>
       <Formik
         initialValues={{
           login: "",
@@ -76,19 +60,6 @@ const Auth = () => {
             : Yup.string(),
         })}
         onSubmit={(values, actions) => {
-          const encode = (data) => {
-            return Object.entries(data)
-              .reduce((acc, [key, val]) => {
-                if (typeof val === "string" && val !== "") {
-                  const encoded =
-                    encodeURIComponent(key) + "=" + encodeURIComponent(val);
-                  acc.push(encoded);
-                }
-                return acc;
-              }, [])
-              .join("&");
-          };
-
           const address = signup ? "cadastro/usuario" : "login";
           fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
             method: "POST",
@@ -101,16 +72,16 @@ const Auth = () => {
                 if (signup) {
                   setSignup(false);
                 } else {
-                  auth.login();
+                  auth.login(res["id"]);
                 }
               } else {
                 if (signup) {
-                  if (res?.erros?.[0]?.nome)
-                    actions.setFieldError("nome", res.erros[0].nome);
-                  if (res?.erros?.[0]?.senha)
-                    actions.setFieldError("senha", res.erros[0].senha);
-                  if (res?.erros?.[0]?.login)
-                    actions.setFieldError("login", res.erros[0].login);
+                  if (res["erros"][0]?.nome)
+                    actions.setFieldError("nome", res["erros"][0]["nome"][0]);
+                  if (res["erros"][0]?.senha)
+                    actions.setFieldError("senha", res["erros"][0]["senha"][0]);
+                  if (res["erros"][0]?.login)
+                    actions.setFieldError("login", res["erros"][0]["login"][0]);
                 } else {
                   actions.setFieldError("login", "Usuário ou senha incorretos");
                 }
@@ -140,7 +111,7 @@ const Auth = () => {
           </FormWrapper>
         </Form>
       </Formik>
-    </AuthBg>
+    </FormBg>
   );
 };
 

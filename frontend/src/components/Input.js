@@ -24,6 +24,7 @@ const StyledInput = styled.div`
     border: 1px solid var(--color-white);
     border-radius: 0.5rem;
     height: 5rem;
+    padding: 0 1rem;
   }
 `;
 
