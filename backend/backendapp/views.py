@@ -162,12 +162,12 @@ def InfosDisciplina(request,disc):
     return return_dict
 
 @acerta_tipo("GET")
-def InfosAtividade(request, atividade):
+def InfosAtividade(request, atividade_id):
     return_dict = {"sucesso":False}
     erros = []
 
     try:
-        atividade = Atividade.objects.get(id = atividade)
+        atividade = Atividade.objects.get(id = atividade_id)
         return_dict["atividade"] = model_to_dict(atividade)
     except Atividade.DoesNotExist:
         erros.append("Não existe atividade com o código informado")  
@@ -213,6 +213,35 @@ def AtualizaDisciplina(request,disc):
         return_dict["sucesso"] = True
     return return_dict
 
+@acerta_tipo("PATCH")
+def AtualizaAtividade(request,atividade_id):
+    return_dict = {"sucesso":False}
+    erros = []
+
+    try:
+        dados = QueryDict(request.body)
+        atividade = Atividade.objects.get(id=atividade_id)
+        post = copy(dados)
+        for k,v in model_to_dict(atividade).items():
+            if k not in dados: post[k] = v
+        form = AtividadeForm(post,instance=atividade)
+        if form.is_valid():
+            form.save()
+        else:
+            erros.append(form.errors)
+
+    except Atividade.DoesNotExist:
+        erros.append("Não existe atividade com o código informado")  
+
+    except Exception as ex:
+        erros.append(str(ex))
+
+    if erros:
+        return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
+    return return_dict
+
 @acerta_tipo("DELETE")
 def DeletaDisciplina(request,disc):
     return_dict = {"sucesso":False}
@@ -227,6 +256,31 @@ def DeletaDisciplina(request,disc):
     
     except Disciplina.DoesNotExist:
         erros.append("Não existe disciplina com o código informado")  
+    
+    except Exception as ex:
+        erros.append(str(ex))
+
+    if erros:
+        return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
+    return return_dict
+
+
+@acerta_tipo("DELETE")
+def DeletaAtividade(request,atividade_id):
+    return_dict = {"sucesso":False}
+    erros = []
+    try:
+        dados = QueryDict(request.body)
+        # auth = dados["auth"]
+        # if auth != 'tp1_es':
+        #     raise Exception("Autenticação inválida")
+        atividade = Atividade.objects.get(id=atividade_id)
+        atividade.delete()
+    
+    except Atividade.DoesNotExist:
+        erros.append("Não existe atividade com o código informado")  
     
     except Exception as ex:
         erros.append(str(ex))

@@ -10,7 +10,9 @@ urlpatterns = [
     path('cadastro/atividade', views.CadastroAtividade, name='CadastroAtividade'),
     path('lista/disciplinas/<int:user>', views.ListaDisciplinas, name='ListaDisciplinas'),
     path('detalhes/disciplina/<int:disc>', views.InfosDisciplina, name='InfosDisciplina'),
+    path('detalhes/atividade/<int:atividade_id>', views.InfosAtividade, name='InfosAtividade'),
     path('atualiza/disciplina/<int:disc>', views.AtualizaDisciplina,name='AtualizaDisciplina'),
-    path('detalhes/atividade/<int:atividade>', views.InfosAtividade, name='InfosAtividade'),
+    path('atualiza/atividade/<int:atividade_id>', views.AtualizaAtividade,name='AtualizaAtividade'),
     path('remove/disciplina/<int:disc>', views.DeletaDisciplina,name='DeletaDisciplina'),
+    path('remove/atividade/<int:atividade_id>', views.DeletaAtividade,name='DeletaAtividade'),
 ]
