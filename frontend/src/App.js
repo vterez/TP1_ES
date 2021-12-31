@@ -13,30 +13,47 @@ import "./shared/style/CSSImports.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((id) => {
     setIsLoggedIn(true);
+    setUserId(id);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null);
   }, []);
 
   //  TODO: provavelmente vai ser necessário adicionar rotas dinâmicas (:id)
   return (
     <>
       <GlobalStyles />
-      <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+      <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
         <BrowserRouter>
           <Navigation />
           {isLoggedIn ? (
             <Routes>
-              <Route path="/" element={<Disciplinas />} />
+              <Route index element={<Navigate replace to="/disciplinas" />} />
               <Route path="/disciplinas" element={<Disciplinas />} />
               <Route path="/atividades" element={<Atividades />} />
-              <Route path="/disciplinas/form" element={<FormDisciplina />} />
-              <Route path="/atividades/form" element={<FormAtividade />} />
-              <Route path="/*" element={<Navigate replace to="/" />} />
+              <Route
+                path="/disciplinas/cadastrar"
+                element={<FormDisciplina />}
+              />
+              <Route path="/atividades/cadastrar" element={<FormAtividade />} />
+              <Route
+                path="/disciplinas/editar/:discId"
+                element={<FormDisciplina />}
+              />
+              <Route
+                path="/atividades/editar/:ativId"
+                element={<FormAtividade />}
+              />
+              <Route
+                path="/*"
+                element={<Navigate replace to="/disciplinas" />}
+              />
             </Routes>
           ) : (
             <Routes>
