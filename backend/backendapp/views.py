@@ -6,6 +6,7 @@ from .utils import *
 from hashlib import blake2s as khash
 from copy import copy
 from django.http import QueryDict
+from datetime import date
 
 
 @acerta_tipo("POST")
@@ -175,6 +176,34 @@ def InfosAtividade(request, atividade_id):
     except Exception as ex:
         erros.append(str(ex))
 
+    if erros:
+        return_dict["erros"] = erros
+    else:
+        return_dict["sucesso"] = True
+    return return_dict
+
+@acerta_tipo("GET")
+def CronogramaAtividades(request,user):
+    return_dict = {"sucesso":False}
+    erros = []
+    lista = []
+    sorted_list = []
+    try:
+        disciplinas = Disciplina.objects.filter(usuario__id = user).values('id','nome')
+        if disciplinas:
+            for disc in disciplinas:
+                atividades = Atividade.objects.filter(disciplina__id = disc['id']).values('id','nome','data')
+                for atividade in atividades:
+                    if atividade['data'].date() >= date.today():
+                        lista.append(atividade)
+
+        else:
+            erros.append("Não existe usuário com esse id")
+        sorted_list = sorted(lista, key = lambda i: i['data'])
+        return_dict["atividades"] = sorted_list
+    except Exception as ex:
+        erros.append(str(ex))
+    
     if erros:
         return_dict["erros"] = erros
     else:

@@ -15,4 +15,6 @@ urlpatterns = [
     path('atualiza/atividade/<int:atividade_id>', views.AtualizaAtividade,name='AtualizaAtividade'),
     path('remove/disciplina/<int:disc>', views.DeletaDisciplina,name='DeletaDisciplina'),
     path('remove/atividade/<int:atividade_id>', views.DeletaAtividade,name='DeletaAtividade'),
+    path('cronograma/<int:user>', views.CronogramaAtividades,name='CronogramaAtividades'),
+
 ]
