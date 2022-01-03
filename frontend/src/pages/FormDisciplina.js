@@ -42,7 +42,7 @@ const FormDisciplina = () => {
   const [errorMessage, setErrorMessage] = useState(false);
 
   useMemo(() => {
-    if (discId) {
+    if (discId && pathState.isLoading) {
       fetch(
         `http://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
       )
@@ -106,12 +106,15 @@ const FormDisciplina = () => {
             const address = discId
               ? `atualiza/disciplina/${discId}`
               : "cadastro/disciplina";
-            const method = discId ? "PATH" : "POST";
+            const method = discId ? "PATCH" : "POST";
+            const body = discId
+              ? encode(values)
+              : encode({ ...values, usuario: auth.userId });
 
             fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
-              method,
+              method: method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: encode({ ...values, usuario: auth.userId }),
+              body: body,
             })
               .then((res) => res.json())
               .then((res) => {
