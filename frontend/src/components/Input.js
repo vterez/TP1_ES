@@ -16,24 +16,33 @@ const StyledInput = styled.div`
     margin-bottom: 0.5rem;
   }
 
-  & > input {
+  & > input,
+  & > textarea,
+  & > select {
+    appearance: none;
     font-size: 1.8rem;
     background-color: var(--color-bg-input);
     color: var(--color-white);
     outline: none;
     border: 1px solid var(--color-white);
     border-radius: 0.5rem;
-    height: 5rem;
+    min-height: 5rem;
+    max-height: 30rem;
     padding: 0 1rem;
+    resize: vertical;
+    ${({ $ta }) => $ta === "textarea" && "height: 15rem;"}
+    ${({ $ta }) => $ta === "textarea" && "padding: 1rem;"}
   }
 `;
 
-const Input = ({ name, label, ...props }) => {
+const Input = ({ name, label, as, ...props }) => {
   return (
-    <StyledInput>
-      <label htmlFor={name}>{label}</label>
-      <Field name={name} id={name} {...props} />
-      <ErrorMessage name={name} component={TextError} />
+    <StyledInput $ta={as}>
+      <>
+        <label htmlFor={name}>{label}</label>
+        <Field name={name} id={name} as={as} {...props} />
+        <ErrorMessage name={name} component={TextError} />
+      </>
     </StyledInput>
   );
 };
