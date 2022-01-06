@@ -6,7 +6,7 @@ from .utils import *
 from hashlib import blake2s as khash
 from copy import copy
 from django.http import QueryDict
-from datetime import date
+from django.utils import timezone
 
 
 @acerta_tipo("POST")
@@ -53,6 +53,7 @@ def CadastroUsuario(request):
             usuario = form.save(commit=False)
             usuario.senha = str(khash(usuario.senha.encode('utf8')).hexdigest())[:30]
             usuario.save()
+            return_dict["id"] = usuario.id
         else:
             erros.append(form.errors)
     
@@ -119,7 +120,6 @@ def CadastroAtividade(request):
 def ListaDisciplinas(request,user):
     return_dict = {"sucesso":False}
     erros = []
-
     try:
         disciplinas = Disciplina.objects.filter(usuario__id = user).values('id','nome')
         #usuario = Usuario.objects.get(pk=id)
@@ -127,7 +127,10 @@ def ListaDisciplinas(request,user):
         if disciplinas:
             return_dict["disciplinas"] = list(disciplinas)
         else:
-            erros.append("Não existe usuário com esse id")
+            if not Usuario.objects.filter(id = user):
+                erros.append("Não existe usuário com esse id")
+            else:
+                return_dict["disciplinas"] = []
 
     except Exception as ex:
         erros.append(str(ex))
@@ -186,28 +189,14 @@ def InfosAtividade(request, atividade_id):
 def CronogramaAtividades(request,user):
     return_dict = {"sucesso":False}
     erros = []
-    lista = []
-    sorted_list = []
     try:
-        disciplinas = Disciplina.objects.filter(usuario__id = user).values('id','nome')
-        if disciplinas:
-            for disc in disciplinas:
-                atividades = Atividade.objects.filter(disciplina__id = disc['id']).values('id','nome','data')
-                for atividade in atividades:
-                    if atividade['data'].date() >= date.today():
-                        lista.append(atividade)
-
-        else:
-            erros.append("Não existe usuário com esse id")
-        sorted_list = sorted(lista, key = lambda i: i['data'])
-        return_dict["atividades"] = sorted_list
+        Usuario.objects.get(pk=user)
+        x = Atividade.objects.filter(disciplina__usuario__id=user).filter(data__gt=timezone.now()).order_by('data').values('nome','disciplina__nome','data')
+        return_dict["sucesso"] = True
+        return_dict["atividades"] = list(x)
     except Exception as ex:
         erros.append(str(ex))
-    
-    if erros:
         return_dict["erros"] = erros
-    else:
-        return_dict["sucesso"] = True
     return return_dict
 
 @acerta_tipo("PATCH")
@@ -277,9 +266,6 @@ def DeletaDisciplina(request,disc):
     erros = []
     try:
         dados = QueryDict(request.body)
-        auth = dados["auth"]
-        if auth != 'tp1_es': #só por segurança
-            raise Exception("Autenticação inválida")
         disciplina = Disciplina.objects.get(id=disc)
         disciplina.delete()
     
