@@ -52,7 +52,7 @@ const FormAtividade = () => {
     if (ativId && pathState.ativLoading) {
       console.log("request");
       fetch(
-        `http://928c-20-102-59-234.sa.ngrok.io/detalhes/atividade/${ativId}`
+        `https://928c-20-102-59-234.sa.ngrok.io/detalhes/atividade/${ativId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -111,7 +111,7 @@ const FormAtividade = () => {
     if (pathState.discLoadign) {
       console.log("request");
       fetch(
-        `http://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
+        `https://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -199,7 +199,7 @@ const FormAtividade = () => {
             const dateObj = new Date(values["data"]);
             const data = dateObj.toISOString();
 
-            fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+            fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
               body: encode({ ...values, data }),

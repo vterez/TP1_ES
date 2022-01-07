@@ -38,30 +38,27 @@ const Auth = () => {
         }}
         validationSchema={Yup.object({
           login: Yup.string()
-            .min(5, "Usuário deve ter pelo menos 5 caracteres")
-            .max(30, "Usuário deve ter no máximo 30 caracteres")
-            .required("Usuário não pode estar vazio"),
+            .max(30, "Máximo 30 caracteres")
+            .required("Obrigatório"),
           senha: Yup.string()
             .min(5, "Senha deve ter pelo menos 5 caracteres")
             .max(30, "Senha deve ter no máximo 30 caracteres")
-            .required("Senha não pode estar vazio"),
+            .required("Obrigatório"),
           email: signup
             ? Yup.string()
                 .email("Email deve ser um email válido")
                 .max(50, "Email deve ter no máximo 50 caracteres")
-                .required("Email não pode estar vazio")
             : Yup.string(),
 
           nome: signup
             ? Yup.string()
-                .min(2, "Nome deve ter pelo menos 2 caracteres")
-                .max(100, "Nome deve ter no máximo 100 caracteres")
-                .required("Email não pode estar vazio")
+                .max(100, "Máximo 100 caracteres")
+                .required("Obrigatório")
             : Yup.string(),
         })}
         onSubmit={(values, actions) => {
           const address = signup ? "cadastro/usuario" : "login";
-          fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+          fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: encode(values),

@@ -42,7 +42,7 @@ const FormDisciplina = () => {
     if (discId && pathState.isLoading) {
       console.log("request");
       fetch(
-        `http://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
+        `https://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -111,7 +111,7 @@ const FormDisciplina = () => {
               ? encode(values)
               : encode({ ...values, usuario: auth.userId });
 
-            fetch(`http://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+            fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
               body,
