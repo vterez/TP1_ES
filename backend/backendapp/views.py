@@ -121,11 +121,9 @@ def ListaDisciplinas(request,user):
     return_dict = {"sucesso":False}
     erros = []
     try:
-        disciplinas = Disciplina.objects.filter(usuario__id = user).values('id','nome')
-        #usuario = Usuario.objects.get(pk=id)
-        #disciplinas = usuario.disciplinas.values('id','nome')
+        disciplinas = Disciplina.objects.filter(usuario__id = user)
         if disciplinas:
-            return_dict["disciplinas"] = list(disciplinas)
+            return_dict["disciplinas"] = [model_to_dict(i) for i in disciplinas]
         else:
             if not Usuario.objects.filter(id = user):
                 erros.append("Não existe usuário com esse id")
@@ -304,4 +302,18 @@ def DeletaAtividade(request,atividade_id):
         return_dict["erros"] = erros
     else:
         return_dict["sucesso"] = True
+    return return_dict
+
+@acerta_tipo("GET")
+def ListaAtividades(request,id):
+    return_dict = {"sucesso":False}
+    erros = []
+    try:
+        Usuario.objects.get(pk=id)
+        x = Atividade.objects.filter(disciplina__usuario__id=id).order_by('data')
+        return_dict["sucesso"] = True
+        return_dict["atividades"] = [model_to_dict(i) for i in x]
+    except Exception as ex:
+        erros.append(str(ex))
+        return_dict["erros"] = erros
     return return_dict

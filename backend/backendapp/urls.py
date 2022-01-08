@@ -16,5 +16,6 @@ urlpatterns = [
     path('remove/disciplina/<int:disc>', views.DeletaDisciplina,name='DeletaDisciplina'),
     path('remove/atividade/<int:atividade_id>', views.DeletaAtividade,name='DeletaAtividade'),
     path('cronograma/<int:user>', views.CronogramaAtividades,name='CronogramaAtividades'),
+    path('lista/atividades/<int:id>',views.ListaAtividades,name='ListaAtividades'),
 
 ]
