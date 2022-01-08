@@ -222,8 +222,6 @@ const FormAtividade = () => {
             const dateObj = new Date(values["data"]);
             const data = dateObj.toISOString();
 
-            console.log({ ...values, data });
-
             fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
