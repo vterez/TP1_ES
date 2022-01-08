@@ -12,22 +12,14 @@ import Button from "../components/Button";
 import { PageBg, ItemWrapper } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
 import { AuthContext } from "../shared/context/AuthContext";
-
-const Loading = styled.div`
-  color: var(--color-white);
-  font-size: 3rem;
-`;
+import { Loading } from "../components/Loading";
+import { BtnWrapper } from "../components/BtnWrapper";
 
 const AddDiscWarning = styled.div`
   color: red;
   text-align: center;
   font-size: 2rem;
   margin-bottom: 2rem;
-`;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
 `;
 
 const FormAtividade = () => {

@@ -1,37 +1,17 @@
-// Página para visualisar todas as disciplinas
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import styled from "styled-components";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { PageBg, ItemWrapper } from "../components/Layout.styles";
+import { ItemWrapper, PageBg } from "../components/Layout.styles";
 import CardTitle from "../components/CardTitle";
 import CardOption from "../components/CardOption";
 import ListHeader from "../components/ListHeader";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-
-const ListContainer = styled.div`
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 80vw;
-  padding-top: clamp(5rem, 8vh, 7rem);
-  gap: 2rem;
-`;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-`;
-
-const Loading = styled.div`
-  color: var(--color-white);
-  font-size: 3rem;
-`;
+import { Loading } from "../components/Loading";
+import { BtnWrapper } from "../components/BtnWrapper";
+import { ListContainer } from "../components/ListContainer";
 
 const Disciplinas = () => {
   const auth = useContext(AuthContext);

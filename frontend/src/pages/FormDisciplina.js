@@ -1,27 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Formik, Form } from "formik";
+import React, { useContext, useEffect, useState } from "react";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-import { PageBg, ItemWrapper } from "../components/Layout.styles";
+import { ItemWrapper, PageBg } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
-
-const Loading = styled.div`
-  color: var(--color-white);
-  font-size: 3rem;
-`;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
-`;
+import { Loading } from "../components/Loading";
+import { BtnWrapper } from "../components/BtnWrapper";
 
 const FormDisciplina = () => {
   const auth = useContext(AuthContext);
