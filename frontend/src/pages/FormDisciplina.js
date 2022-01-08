@@ -119,7 +119,7 @@ const FormDisciplina = () => {
               .then((res) => res.json())
               .then((res) => {
                 if (res["sucesso"]) {
-                  navigate("disciplinas", { replace: true });
+                  navigate("/disciplinas", { replace: true });
                 } else {
                   if (discId) {
                     if (typeof res["erros"][0] === "string") {
@@ -164,7 +164,7 @@ const FormDisciplina = () => {
                 <Button
                   color="red"
                   type="button"
-                  onClick={() => navigate("disciplinas", { replace: true })}
+                  onClick={() => navigate("/disciplinas", { replace: true })}
                 >
                   Cancelar
                 </Button>

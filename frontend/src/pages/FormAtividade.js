@@ -34,18 +34,36 @@ const FormAtividade = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { ativId } = useParams();
-  const [pathState, setPathState] = useState({
-    ativLoading: !!ativId,
-    discLoadign: true,
-    initialValues: {
-      nome: "",
-      valor: "",
-      nota: "",
-      data: "",
-      conteudos: "",
-      disciplina: "",
-    },
-    discList: [],
+  const [pathState, setPathState] = useState(() => {
+    const pad = (date) => {
+      return date.toString().padStart(2, "0");
+    };
+
+    const toISODate = (date) => {
+      return (
+        date.getFullYear() +
+        "-" +
+        pad(dateObj.getMonth() + 1) +
+        "-" +
+        pad(dateObj.getDate())
+      );
+    };
+
+    const dateObj = new Date();
+
+    return {
+      ativLoading: !!ativId,
+      discLoadign: true,
+      initialValues: {
+        nome: "",
+        valor: "",
+        nota: "",
+        data: toISODate(dateObj),
+        conteudos: "",
+        disciplina: "",
+      },
+      discList: [],
+    };
   });
 
   useEffect(() => {
@@ -117,10 +135,15 @@ const FormAtividade = () => {
         .then((res) => {
           if (res["sucesso"]) {
             setPathState((prevState) => {
+              const temp = prevState.initialValues;
+
+              if (res["disciplinas"].length > 0)
+                temp["disciplina"] = res["disciplinas"][0]["id"];
+
               return {
                 ativLoading: prevState.ativLoading,
                 discLoading: false,
-                initialValues: prevState.initialValues,
+                initialValues: temp,
                 discList: res["disciplinas"],
               };
             });
@@ -199,6 +222,8 @@ const FormAtividade = () => {
             const dateObj = new Date(values["data"]);
             const data = dateObj.toISOString();
 
+            console.log({ ...values, data });
+
             fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -207,7 +232,7 @@ const FormAtividade = () => {
               .then((res) => res.json())
               .then((res) => {
                 if (res["sucesso"]) {
-                  navigate("atividades", { replace: true });
+                  navigate("/atividades", { replace: true });
                 } else if (typeof res["erros"][0] === "object") {
                   Object.entries(res["erros"][0]).forEach(([key, val]) => {
                     actions.setFieldError(key, val[0]);
@@ -243,7 +268,7 @@ const FormAtividade = () => {
                 <Button
                   color="red"
                   type="button"
-                  onClick={() => navigate("atividades", { replace: true })}
+                  onClick={() => navigate("/atividades", { replace: true })}
                 >
                   Cancelar
                 </Button>

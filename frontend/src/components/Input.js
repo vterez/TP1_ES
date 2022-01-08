@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, useFormikContext } from "formik";
 
 import TextError from "./TextError";
 
@@ -35,12 +35,24 @@ const StyledInput = styled.div`
   }
 `;
 
-const Input = ({ name, label, as, ...props }) => {
+const Input = ({ children, name, label, as, ...props }) => {
+  const { handleChange } = useFormikContext();
+
   return (
     <StyledInput $ta={as}>
       <>
         <label htmlFor={name}>{label}</label>
-        <Field name={name} id={name} as={as} {...props} />
+        <Field
+          name={name}
+          id={name}
+          as={as}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          {...props}
+        >
+          {children}
+        </Field>
         <ErrorMessage name={name} component={TextError} />
       </>
     </StyledInput>
