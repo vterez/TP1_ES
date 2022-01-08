@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-import { FormBg, FormWrapper } from "../components/Form.styles";
+import { PageBg, ItemWrapper } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
 
 const Switch = styled.button`
@@ -28,7 +28,7 @@ const Auth = () => {
   };
 
   return (
-    <FormBg>
+    <PageBg>
       <Formik
         initialValues={{
           login: "",
@@ -90,7 +90,7 @@ const Auth = () => {
         }}
       >
         <Form>
-          <FormWrapper>
+          <ItemWrapper>
             <Input name="login" label="Usuário" />
             <Input name="senha" type="password" label="Senha" />
             {signup && (
@@ -105,10 +105,10 @@ const Auth = () => {
             <Switch type="button" onClick={signupSwitch}>
               {signup ? "Login" : "Cadastrar"}
             </Switch>
-          </FormWrapper>
+          </ItemWrapper>
         </Form>
       </Formik>
-    </FormBg>
+    </PageBg>
   );
 };
 

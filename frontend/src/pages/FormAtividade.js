@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { FormBg, FormWrapper } from "../components/Form.styles";
+import { PageBg, ItemWrapper } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
 import { AuthContext } from "../shared/context/AuthContext";
 
@@ -68,7 +68,6 @@ const FormAtividade = () => {
 
   useEffect(() => {
     if (ativId && pathState.ativLoading) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/detalhes/atividade/${ativId}`
       )
@@ -127,7 +126,6 @@ const FormAtividade = () => {
 
   useEffect(() => {
     if (pathState.discLoadign) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
       )
@@ -180,11 +178,11 @@ const FormAtividade = () => {
   }, [auth, pathState]);
 
   return (
-    <FormBg key={window.location.pathname}>
+    <PageBg key={window.location.pathname}>
       {pathState.ativLoading || pathState.discLoadign ? (
         <Loading>{"Loading..."}</Loading>
       ) : pathState.discList.length === 0 ? (
-        <FormWrapper>
+        <ItemWrapper>
           <AddDiscWarning>
             Deve existir ao menos umas disciplina antes de cadastrar atividades!
           </AddDiscWarning>
@@ -197,7 +195,7 @@ const FormAtividade = () => {
           >
             Adicionar Disciplina
           </Button>
-        </FormWrapper>
+        </ItemWrapper>
       ) : (
         <Formik
           initialValues={pathState.initialValues}
@@ -244,7 +242,7 @@ const FormAtividade = () => {
         >
           <Form>
             <ToastContainer />
-            <FormWrapper>
+            <ItemWrapper>
               <Input name="disciplina" label="Disciplina" as="select">
                 {pathState.discList.map((val) => {
                   return (
@@ -271,11 +269,11 @@ const FormAtividade = () => {
                   Cancelar
                 </Button>
               </BtnWrapper>
-            </FormWrapper>
+            </ItemWrapper>
           </Form>
         </Formik>
       )}
-    </FormBg>
+    </PageBg>
   );
 };
 

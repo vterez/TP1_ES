@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-import { FormBg, FormWrapper } from "../components/Form.styles";
+import { PageBg, ItemWrapper } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
 
 const Loading = styled.div`
@@ -40,7 +40,6 @@ const FormDisciplina = () => {
 
   useEffect(() => {
     if (discId && pathState.isLoading) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
       )
@@ -83,7 +82,7 @@ const FormDisciplina = () => {
   }, [discId, pathState]);
 
   return (
-    <FormBg key={window.location.pathname}>
+    <PageBg key={window.location.pathname}>
       {pathState.isLoading ? (
         <Loading>{"Loading..."}</Loading>
       ) : (
@@ -146,7 +145,7 @@ const FormDisciplina = () => {
         >
           <Form>
             <ToastContainer />
-            <FormWrapper>
+            <ItemWrapper>
               <Input name="nome" label="Disciplina" />
               <Input name="professor" label="Professor" />
               <Input name="sala" label="Sala" />
@@ -169,11 +168,11 @@ const FormDisciplina = () => {
                   Cancelar
                 </Button>
               </BtnWrapper>
-            </FormWrapper>
+            </ItemWrapper>
           </Form>
         </Formik>
       )}
-    </FormBg>
+    </PageBg>
   );
 };
 

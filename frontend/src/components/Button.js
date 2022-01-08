@@ -21,6 +21,9 @@ const Button = ({ children, color, ...props }) => {
     case "red":
       bg = "var(--color-red)";
       break;
+    case "grey":
+      bg = "var(--main-color-200)";
+      break;
     default:
       bg = "revert";
   }

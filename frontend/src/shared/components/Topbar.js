@@ -14,6 +14,10 @@ const Header = styled.header`
   padding: 0.5rem 7%;
   user-select: none;
   z-index: 10;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
 `;
 
 const Bars = styled(FaBars)`
