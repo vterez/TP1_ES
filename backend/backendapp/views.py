@@ -95,10 +95,9 @@ def CadastroDisciplina(request):
 def CadastroAtividade(request):
     return_dict = {"sucesso":False}
     erros = []
-    dicionario = dict(request.POST)
-    dicionario["nota"] = None
+
     try:
-        form = AtividadeForm(dicionario)
+        form = AtividadeForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['nome'] in [x[0] for x in Disciplina.objects.get(pk=request.POST['disciplina']).atividades.values_list('nome')]:
                 erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
