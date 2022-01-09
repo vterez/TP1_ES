@@ -29,7 +29,11 @@ const Atividades = () => {
             const ativ = { ...elements };
             for (const key in ativ) {
               if (ativ[key] === "null") delete ativ[key];
-              if (key === "data") {
+              if (
+                key === "data" &&
+                ativ[key] !== "null" &&
+                ativ[key] !== null
+              ) {
                 const date = new Date(ativ[key]);
                 ativ[key] = date.toLocaleDateString();
               }
