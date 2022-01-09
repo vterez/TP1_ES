@@ -1,27 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Formik, Form } from "formik";
+import React, { useContext, useEffect, useState } from "react";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { AuthContext } from "../shared/context/AuthContext";
-import { FormBg, FormWrapper } from "../components/Form.styles";
+import { ItemWrapper, PageBg } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
-
-const Loading = styled.div`
-  color: var(--color-white);
-  font-size: 3rem;
-`;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
-`;
+import { Loading } from "../components/Loading";
+import { BtnWrapper } from "../components/BtnWrapper";
 
 const FormDisciplina = () => {
   const auth = useContext(AuthContext);
@@ -40,7 +30,6 @@ const FormDisciplina = () => {
 
   useEffect(() => {
     if (discId && pathState.isLoading) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
       )
@@ -49,7 +38,10 @@ const FormDisciplina = () => {
           if (res["sucesso"]) {
             const temp = { ...pathState.initialValues };
             for (const discKey in res["disciplina"]) {
-              if (discKey in pathState.initialValues) {
+              if (
+                discKey in pathState.initialValues &&
+                res["disciplina"][discKey] !== "null"
+              ) {
                 temp[discKey] = res["disciplina"][discKey];
               }
             }
@@ -83,7 +75,7 @@ const FormDisciplina = () => {
   }, [discId, pathState]);
 
   return (
-    <FormBg key={window.location.pathname}>
+    <PageBg key={window.location.pathname}>
       {pathState.isLoading ? (
         <Loading>{"Loading..."}</Loading>
       ) : (
@@ -146,7 +138,7 @@ const FormDisciplina = () => {
         >
           <Form>
             <ToastContainer />
-            <FormWrapper>
+            <ItemWrapper>
               <Input name="nome" label="Disciplina" />
               <Input name="professor" label="Professor" />
               <Input name="sala" label="Sala" />
@@ -169,11 +161,11 @@ const FormDisciplina = () => {
                   Cancelar
                 </Button>
               </BtnWrapper>
-            </FormWrapper>
+            </ItemWrapper>
           </Form>
         </Formik>
       )}
-    </FormBg>
+    </PageBg>
   );
 };
 

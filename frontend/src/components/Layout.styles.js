@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
-export const FormBg = styled.div`
+export const PageBg = styled.div`
   background-color: var(--main-color-400);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: clamp(5rem, 8vh, 7rem);
 `;
 
-export const FormWrapper = styled.div`
+export const ItemWrapper = styled.div`
   background-color: var(--main-color-100);
   border-radius: 1rem;
   padding: 1rem;

@@ -9,25 +9,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { FormBg, FormWrapper } from "../components/Form.styles";
+import { PageBg, ItemWrapper } from "../components/Layout.styles";
 import { encode } from "../shared/utils/encodeUrl";
 import { AuthContext } from "../shared/context/AuthContext";
-
-const Loading = styled.div`
-  color: var(--color-white);
-  font-size: 3rem;
-`;
+import { Loading } from "../components/Loading";
+import { BtnWrapper } from "../components/BtnWrapper";
 
 const AddDiscWarning = styled.div`
   color: red;
   text-align: center;
   font-size: 2rem;
   margin-bottom: 2rem;
-`;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
 `;
 
 const FormAtividade = () => {
@@ -68,7 +60,6 @@ const FormAtividade = () => {
 
   useEffect(() => {
     if (ativId && pathState.ativLoading) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/detalhes/atividade/${ativId}`
       )
@@ -77,7 +68,10 @@ const FormAtividade = () => {
           if (res["sucesso"]) {
             const temp = { ...pathState.initialValues };
             for (const discKey in res["atividade"]) {
-              if (discKey in pathState.initialValues) {
+              if (
+                discKey in pathState.initialValues &&
+                res["atividade"][discKey] !== "null"
+              ) {
                 temp[discKey] = res["atividade"][discKey];
                 if (discKey === "data") {
                   const dateObj = new Date(temp[discKey]);
@@ -127,7 +121,6 @@ const FormAtividade = () => {
 
   useEffect(() => {
     if (pathState.discLoadign) {
-      console.log("request");
       fetch(
         `https://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
       )
@@ -180,11 +173,11 @@ const FormAtividade = () => {
   }, [auth, pathState]);
 
   return (
-    <FormBg key={window.location.pathname}>
+    <PageBg key={window.location.pathname}>
       {pathState.ativLoading || pathState.discLoadign ? (
         <Loading>{"Loading..."}</Loading>
       ) : pathState.discList.length === 0 ? (
-        <FormWrapper>
+        <ItemWrapper>
           <AddDiscWarning>
             Deve existir ao menos umas disciplina antes de cadastrar atividades!
           </AddDiscWarning>
@@ -197,7 +190,7 @@ const FormAtividade = () => {
           >
             Adicionar Disciplina
           </Button>
-        </FormWrapper>
+        </ItemWrapper>
       ) : (
         <Formik
           initialValues={pathState.initialValues}
@@ -219,8 +212,13 @@ const FormAtividade = () => {
               ? `atualiza/atividate/${ativId}`
               : "cadastro/atividade";
             const method = ativId ? "PATCH" : "POST";
-            const dateObj = new Date(values["data"]);
-            const data = dateObj.toISOString();
+
+            let dateObj;
+            let data = "";
+            if (values["data"] !== "") {
+              dateObj = new Date(values["data"]);
+              data = dateObj.toISOString();
+            }
 
             fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
@@ -244,7 +242,7 @@ const FormAtividade = () => {
         >
           <Form>
             <ToastContainer />
-            <FormWrapper>
+            <ItemWrapper>
               <Input name="disciplina" label="Disciplina" as="select">
                 {pathState.discList.map((val) => {
                   return (
@@ -271,11 +269,11 @@ const FormAtividade = () => {
                   Cancelar
                 </Button>
               </BtnWrapper>
-            </FormWrapper>
+            </ItemWrapper>
           </Form>
         </Formik>
       )}
-    </FormBg>
+    </PageBg>
   );
 };
 
