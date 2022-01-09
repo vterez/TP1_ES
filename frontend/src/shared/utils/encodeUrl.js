@@ -5,11 +5,6 @@ export const encode = (data) => {
         const encoded = encodeURIComponent(key) + "=" + encodeURIComponent(val);
         acc.push(encoded);
       }
-      if (typeof val === "string" && val === "") {
-        const encoded =
-          encodeURIComponent(key) + "=" + encodeURIComponent(null);
-        acc.push(encoded);
-      }
       if (typeof val !== "string") {
         const encoded = encodeURIComponent(key) + "=" + encodeURIComponent(val);
         acc.push(encoded);

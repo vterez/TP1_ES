@@ -19,7 +19,6 @@ const Atividades = () => {
   const [listState, setListState] = useState({ isLoading: true, list: [] });
 
   const fetchList = useCallback(() => {
-    console.log("request");
     fetch(
       `https://928c-20-102-59-234.sa.ngrok.io/lista/atividades/${auth.userId}`
     )
