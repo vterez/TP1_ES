@@ -310,7 +310,7 @@ def ListaAtividades(request,id):
     erros = []
     try:
         Usuario.objects.get(pk=id)
-        x = Atividade.objects.filter(disciplina__usuario__id=id).order_by('data').values('nome','valor','nota','data','disciplina__nome')
+        x = Atividade.objects.filter(disciplina__usuario__id=id).order_by('data').values('id','nome','valor','nota','data','disciplina__nome')
         return_dict["sucesso"] = True
         return_dict["atividades"] = list(x)
     except Exception as ex:
