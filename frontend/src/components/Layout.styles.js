@@ -6,6 +6,7 @@ export const PageBg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: clamp(5rem, 8vh, 7rem);
 `;
 
 export const ItemWrapper = styled.div`
