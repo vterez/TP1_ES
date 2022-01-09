@@ -89,6 +89,11 @@ const Atividades = () => {
             return (
               <ItemWrapper key={idx}>
                 <CardTitle>{val["nome"]}</CardTitle>
+                {val["disciplina__nome"] && (
+                  <CardOption name="Disciplina">
+                    {val["disciplina__nome"]}
+                  </CardOption>
+                )}
                 {val["valor"] && (
                   <CardOption name="Valor">{val["valor"]}</CardOption>
                 )}
