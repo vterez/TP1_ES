@@ -68,7 +68,10 @@ const FormAtividade = () => {
           if (res["sucesso"]) {
             const temp = { ...pathState.initialValues };
             for (const discKey in res["atividade"]) {
-              if (discKey in pathState.initialValues) {
+              if (
+                discKey in pathState.initialValues &&
+                res["atividade"][discKey] !== "null"
+              ) {
                 temp[discKey] = res["atividade"][discKey];
                 if (discKey === "data") {
                   const dateObj = new Date(temp[discKey]);

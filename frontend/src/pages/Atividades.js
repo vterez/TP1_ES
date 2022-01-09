@@ -88,18 +88,18 @@ const Atividades = () => {
           listState.list.map((val, idx) => {
             return (
               <ItemWrapper key={idx}>
-                <CardTitle>{val?.["nome"]}</CardTitle>
-                {val?.["valor"] && (
-                  <CardOption name="Valor">{val?.["valor"]}</CardOption>
+                <CardTitle>{val["nome"]}</CardTitle>
+                {val["valor"] && (
+                  <CardOption name="Valor">{val["valor"]}</CardOption>
                 )}
-                {val?.["nota"] && (
-                  <CardOption name="Nota">{val?.["nota"]}</CardOption>
+                {val["nota"] && (
+                  <CardOption name="Nota">{val["nota"]}</CardOption>
                 )}
-                {val?.["data"] && (
+                {val["data"] && (
                   <CardOption name="Data">{val["data"]}</CardOption>
                 )}
-                {val?.["conteudo"] && (
-                  <CardOption name="Conteúdo">{val?.["conteudo"]}</CardOption>
+                {val["conteudo"] && (
+                  <CardOption name="Conteúdo">{val["conteudo"]}</CardOption>
                 )}
                 <BtnWrapper>
                   <Button

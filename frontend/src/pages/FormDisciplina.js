@@ -38,7 +38,10 @@ const FormDisciplina = () => {
           if (res["sucesso"]) {
             const temp = { ...pathState.initialValues };
             for (const discKey in res["disciplina"]) {
-              if (discKey in pathState.initialValues) {
+              if (
+                discKey in pathState.initialValues &&
+                res["disciplina"][discKey] !== "null"
+              ) {
                 temp[discKey] = res["disciplina"][discKey];
               }
             }
