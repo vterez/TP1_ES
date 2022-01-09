@@ -25,7 +25,14 @@ const Disciplinas = () => {
       .then((res) => res.json())
       .then((res) => {
         if (res["sucesso"]) {
-          setListState({ isLoading: false, list: res["disciplinas"] });
+          const temp = res["disciplinas"].map((elements) => {
+            const disc = { ...elements };
+            for (const key in disc) {
+              if (disc[key] === "null") delete disc[key];
+            }
+            return disc;
+          });
+          setListState({ isLoading: false, list: temp });
         } else {
           res["erros"].forEach((val) => toast.error(val, { theme: "dark" }));
           setListState({ isLoading: false, list: [] });

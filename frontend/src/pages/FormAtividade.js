@@ -209,8 +209,13 @@ const FormAtividade = () => {
               ? `atualiza/atividate/${ativId}`
               : "cadastro/atividade";
             const method = ativId ? "PATCH" : "POST";
-            const dateObj = new Date(values["data"]);
-            const data = dateObj.toISOString();
+
+            let dateObj;
+            let data = "";
+            if (values["data"] !== "") {
+              dateObj = new Date(values["data"]);
+              data = dateObj.toISOString();
+            }
 
             fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
               method,
