@@ -209,7 +209,7 @@ const FormAtividade = () => {
           })}
           onSubmit={(values, actions) => {
             const address = ativId
-              ? `atualiza/atividate/${ativId}`
+              ? `atualiza/atividade/${ativId}`
               : "cadastro/atividade";
             const method = ativId ? "PATCH" : "POST";
 
