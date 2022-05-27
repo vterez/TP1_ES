@@ -31,7 +31,7 @@ const FormDisciplina = () => {
   useEffect(() => {
     if (discId && pathState.isLoading) {
       fetch(
-        `https://928c-20-102-59-234.sa.ngrok.io/detalhes/disciplina/${discId}`
+        `http://127.0.0.1:8000/detalhes/disciplina/${discId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -103,7 +103,7 @@ const FormDisciplina = () => {
               ? encode(values)
               : encode({ ...values, usuario: auth.userId });
 
-            fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+            fetch(`http://127.0.0.1:8000/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
               body,

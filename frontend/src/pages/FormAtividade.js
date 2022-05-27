@@ -61,7 +61,7 @@ const FormAtividade = () => {
   useEffect(() => {
     if (ativId && pathState.ativLoading) {
       fetch(
-        `https://928c-20-102-59-234.sa.ngrok.io/detalhes/atividade/${ativId}`
+        `http://127.0.0.1:8000/detalhes/atividade/${ativId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -122,7 +122,7 @@ const FormAtividade = () => {
   useEffect(() => {
     if (pathState.discLoadign) {
       fetch(
-        `https://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
+        `http://127.0.0.1:8000/lista/disciplinas/${auth.userId}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -220,7 +220,7 @@ const FormAtividade = () => {
               data = dateObj.toISOString();
             }
 
-            fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+            fetch(`http://127.0.0.1:8000/${address}`, {
               method,
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
               body: encode({ ...values, data }),
