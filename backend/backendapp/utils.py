@@ -18,3 +18,22 @@ def nota_valida(nota, total):
     if nota > total:
         return False
     return True
+
+def situacao_atividade(nota, total):
+    if nota/total >= 0.6:
+        return 'Acima da Média'
+    return 'Abaixo da Média'
+
+def creditos_disciplinas(carga_horaria):
+    if carga_horaria == 15:
+        return 1
+    elif carga_horaria == 30:
+        return 2
+    elif carga_horaria == 45:
+        return 3
+    elif carga_horaria == 60:
+        return 4
+    elif carga_horaria == 75:
+        return 5
+    elif carga_horaria == 90:
+        return 6        
