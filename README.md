@@ -1,6 +1,5 @@
-# TP
+# Trabalho Prático - Teste de Software
 
-Neste projeto, desenvolvemos um sistema de gerenciamento de avaliações e disciplinas para estudantes. 
 
 ## Membros do grupo
 
