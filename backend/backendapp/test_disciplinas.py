@@ -8,18 +8,28 @@ from backendapp.models import *
 import pytest
 import unittest
 
-class TesteDisciplina(unittest.TestCase):
-    def setUp(self):
+class TesteDisciplina(object):
+    def setup_method(self):
         self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'NomeTeste', senha = 'teste')
 
-    def tearDown(self):
+    def teardown_method(self):
         self.usuarioTeste.delete()
 
     def test_disciplina_sem_usuario(self):
-        with self.assertRaises(Exception):
+        with pytest.raises(Exception):
             disciplinaTeste = Disciplina.objects.create()
     
     def test_disciplina_com_usuario(self):
         disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste)
         assert disciplinaTeste.usuario.nome == 'NomeTeste'
         disciplinaTeste.delete()
+    
+    # def test_disciplina_carga_horario_menor_que_15(self):
+    #     with self.assertRaises(Exception):
+    #         disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste, carga_horaria = 12).save()
+    #         disciplinaTeste.delete()
+
+    # def test_numero_sala_menor_que_1000(self):
+    #     with self.assertRaises(Exception):
+    #         disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste, sala = 12).save()
+    #         disciplinaTeste.delete()
