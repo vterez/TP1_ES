@@ -1,4 +1,5 @@
-from urllib.request import Request
+import json
+import requests
 import pytest
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import RequestFactory
@@ -22,10 +23,14 @@ class TestView(unittest.TestCase):
     def tearDown(self):
         self.usuarioTeste.delete()
 
-
-    def test_Login(self):
+    def test_Login_Correto(self):
         cliente = Client()
         response = cliente.post('/login', {"login": "LoginTeste", "senha": "teste"})
-        assert response.status_code == 200
+        json_response = response.json()
+        assert json_response['sucesso']
 
-        
+    def test_Login_Incorreto(self):
+        cliente = Client()
+        response = cliente.post('/login', {"login": "LoginTeste", "senha": "senhaerrada"})
+        json_response = response.json()
+        assert not json_response['sucesso']
