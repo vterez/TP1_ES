@@ -32,7 +32,6 @@ class TesteUsuario(object):
             usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_com_senha_vazia', nome = 'nome_usuario_com_senha_vazia', senha = None)
             usuarioTeste2.delete()
 
-
     def test_usuario_correto(self):
         usuarioTeste2 = self.usuarioTeste
         assert usuarioTeste2.login == 'LoginTeste'
