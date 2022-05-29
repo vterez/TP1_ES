@@ -1,16 +1,25 @@
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 from .utils import *
+from django.core.exceptions import ValidationError
+import django
+django.setup()
+from backendapp.models import *
+import pytest
+import unittest
 
-class TesteDisciplina(object):
-    def test_creditos_um(x):
-        assert creditos_disciplinas(15) == 1
-    def test_creditos_dois(x):
-        assert creditos_disciplinas(30) == 2
-    def test_creditos_tres(x):
-        assert creditos_disciplinas(45) == 3
-    def test_creditos_quatro(x):
-        assert creditos_disciplinas(60) == 4
-    def test_creditos_cinco(x):
-        assert creditos_disciplinas(75) == 5
-    def test_creditos_seis(x):
-        assert creditos_disciplinas(90) == 6
- 
+class TesteDisciplina(unittest.TestCase):
+    def setUp(self):
+        self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'NomeTeste', senha = 'teste')
+
+    def tearDown(self):
+        self.usuarioTeste.delete()
+
+    def test_disciplina_sem_usuario(self):
+        with self.assertRaises(Exception):
+            disciplinaTeste = Disciplina.objects.create()
+    
+    def test_disciplina_com_usuario(self):
+        disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste)
+        assert disciplinaTeste.usuario.nome == 'NomeTeste'
+        disciplinaTeste.delete()
