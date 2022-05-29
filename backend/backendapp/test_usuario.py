@@ -21,14 +21,18 @@ class TesteUsuario(unittest.TestCase):
     def test_usuario_login_existente(self):
         with self.assertRaises(Exception):
             usuarioTeste2 = Usuario.objects.create(login = 'LoginTeste', nome = 'LoginTeste', senha = 'teste')
+            usuarioTeste2.delete()
 
     def test_usuario_sem_nome(self):
         with self.assertRaises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSemNomeTeste', senha = 'teste')
+            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSemNomeTeste', senha = 'teste').save()
+            usuarioTeste2.delete()
 
     def test_usuario_com_senha_vazia(self):
         with self.assertRaises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSenhaVaziaTeste', nome = 'teste', senha = '')
+            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSenhaVaziaTeste', nome = 'teste', senha = '').save()
+            usuarioTeste2.delete()
+
 
     def test_usuario_correto(self):
         usuarioTeste2 = self.usuarioTeste
