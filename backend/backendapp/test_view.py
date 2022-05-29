@@ -9,7 +9,6 @@ from django.urls import reverse
 from backendapp import views
 from backendapp.models import *
 import unittest
-import requests
 from django.urls import reverse
 from django.http import HttpRequest
 
