@@ -24,12 +24,12 @@ class TesteUsuario(object):
 
     def test_usuario_sem_nome(self):
         with pytest.raises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_sem_nome', nome = null, senha = 'senha_usuario_sem_nome')
+            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_sem_nome', nome = None, senha = 'senha_usuario_sem_nome')
             usuarioTeste2.delete()
 
     def test_usuario_com_senha_vazia(self):
         with pytest.raises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_com_senha_vazia', nome = 'nome_usuario_com_senha_vazia', senha = null)
+            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_com_senha_vazia', nome = 'nome_usuario_com_senha_vazia', senha = None)
             usuarioTeste2.delete()
 
 

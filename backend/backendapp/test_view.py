@@ -21,14 +21,20 @@ class TestView(unittest.TestCase):
     def tearDown(self):
         self.usuarioTeste.delete()
 
-    def test_Login_Correto(self):
+    def test_login_correto(self):
         cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTeste", "senha": "teste"})
+        response = cliente.post('/login', {"login": "taiskc@gmail.com", "senha": "teste"})
         json_response = response.json()
         assert json_response['sucesso']
 
-    def test_Login_Incorreto(self):
+    def test_login_senha_incorreta(self):
         cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTeste", "senha": "senhaerrada"})
+        response = cliente.post('/login', {"login": "taiskc@gmail.com", "senha": "senhaerrada"})
         json_response = response.json()
-        assert not json_response['sucesso']
+        assert not json_response['erros'] == 'Senha incorreta'
+        
+    def test_login_usuario_incorreto(self):
+        cliente = Client()
+        response = cliente.post('/login', {"login": "taiskc2@gmail.com", "senha": "senhaerrada"})
+        json_response = response.json()
+        assert not json_response['erros'] == 'Usuário não cadastrado'
