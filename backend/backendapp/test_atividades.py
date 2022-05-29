@@ -8,13 +8,13 @@ from backendapp.models import *
 import pytest
 import unittest
 
-class TesteAtividades(unittest.TestCase):
+class TesteAtividades(object):
 
-    def setUp(self):
+    def setup_method(self):
         self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'NomeTeste', senha = 'teste')
         self.disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste)
 
-    def tearDown(self):
+    def teardown_method(self):
         self.usuarioTeste.delete()
         self.disciplinaTeste.delete()
 
@@ -31,8 +31,8 @@ class TesteAtividades(unittest.TestCase):
         assert not valida
 
     def test_atividade_sem_disciplina(self):
-        with self.assertRaises(Exception):
-            atividadeTeste = Atividade.objects.create()     
+        with pytest.raises(Exception):
+            Atividade.objects.create()     
 
     def test_disciplina_com_usuario(self):
         atividadeTeste = Atividade.objects.create(disciplina = self.disciplinaTeste)     
@@ -41,13 +41,15 @@ class TesteAtividades(unittest.TestCase):
 
     #Esse teste está falhando. Está inserindo atividade com nome maior que 100 caracteres.
     # def test_nome_atividade_maior_100(self):
-    #     with self.assertRaises(Exception):
-    #         Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'Nome muito grande que gera excessão por ter tamaho maior que 100 e não passar na validação de nome da classe Atividade')
+    #     #with self.assertRaises(Exception):
+    #     atividade = Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'Nome muito grande que gera excessão por ter tamaho maior que 100 e não passar na validação de nome da classe Atividade').save()
+    #     print(len(atividade.nome))
 
     # def test_valor_atividade_maior_que_100(self):
     #     with self.assertRaises(Exception):
-    #         Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'teste', valor = 200)
-
+    #         atividade = Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'teste', valor = 22).save()
+    #         print(len(atividade.valor))
+            
     # def test_valor_atividade_mais_que_3_casas_decimais(self):
     #     with self.assertRaises(Exception):
     #         Atividade(nome = 'teste', valor = 2.222).save()    

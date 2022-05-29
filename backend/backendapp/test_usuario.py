@@ -8,32 +8,37 @@ from backendapp.models import *
 import pytest
 import unittest
 
-class TesteUsuario(unittest.TestCase):
+class TesteUsuario(object):
 
-    def setUp(self):
+    def setup_method(self):
         self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'LoginTeste', senha = 'teste')
         self.disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste)
 
-    def tearDown(self):
+    def teardown_method(self):
         self.usuarioTeste.delete()
         self.disciplinaTeste.delete()
 
     def test_usuario_login_existente(self):
-        with self.assertRaises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'LoginTeste', nome = 'LoginTeste', senha = 'teste')
-            usuarioTeste2.delete()
+        with pytest.raises(Exception):
+            usuarioTeste2 = Usuario.objects.create(login = 'LoginTeste', nome = 'Nome_usuario_login_existente', senha = 'senha_usuario_login_existente')
 
     def test_usuario_sem_nome(self):
-        with self.assertRaises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSemNomeTeste', senha = 'teste').save()
+        with pytest.raises(Exception):
+            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_sem_nome', nome = null, senha = 'senha_usuario_sem_nome')
             usuarioTeste2.delete()
 
     def test_usuario_com_senha_vazia(self):
-        with self.assertRaises(Exception):
-            usuarioTeste2 = Usuario.objects.create(login = 'LoginUsuarioSenhaVaziaTeste', nome = 'teste', senha = '').save()
+        with pytest.raises(Exception):
+            usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_com_senha_vazia', nome = 'nome_usuario_com_senha_vazia', senha = null)
             usuarioTeste2.delete()
 
 
     def test_usuario_correto(self):
         usuarioTeste2 = self.usuarioTeste
         assert usuarioTeste2.login == 'LoginTeste'
+
+    def test_usuario_nome_grande(self):
+        #with self.assertRaises(ValidationError):
+        usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_nome_grande',nome = 'testetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetesteteste', senha = 'senha_usuario_nome_grande')
+        assert len(usuarioTeste2.nome) > 100
+        usuarioTeste2.delete()
