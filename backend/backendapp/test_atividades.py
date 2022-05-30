@@ -7,6 +7,7 @@ django.setup()
 from backendapp.models import *
 import pytest
 import unittest
+from django.test import Client
 
 class TesteAtividades(object):
 
@@ -37,8 +38,36 @@ class TesteAtividades(object):
     def test_disciplina_com_usuario(self):
         atividadeTeste = Atividade.objects.create(disciplina = self.disciplinaTeste)     
         assert atividadeTeste.disciplina.usuario.nome == 'NomeTeste'
-        atividadeTeste.delete()   
+        atividadeTeste.delete()
 
+    def test_atividade_nota_maior_valor(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert 'Nota não pode ser maior que o total' in json_response['erros']
+
+    def test_atividade_nota_igual_valor(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
+
+    def test_atividade_nota_negativa(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": -10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert 'Nota não pode ser negativa' in json_response['erros']
+
+    def test_atividade_valor_negativo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": -10})
+        json_response = response.json()
+        print(json_response)
+        assert 'Valor não pode ser negativo' in json_response['erros']
+  
     #Esse teste está falhando. Está inserindo atividade com nome maior que 100 caracteres.
     # def test_nome_atividade_maior_100(self):
     #     #with self.assertRaises(Exception):
