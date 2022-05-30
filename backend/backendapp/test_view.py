@@ -21,22 +21,20 @@ class TestView(object):
     def teardown_method(self):
         self.usuarioTeste.delete()
 
-
-    def test_Login_Incorreto(self):
+    def test_login_correto(self):
         cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTeste", "senha": "senhaerrada"})
+        response = cliente.post('/login', {"login": "taiskc@gmail.com", "senha": "teste"})
         json_response = response.json()
-        assert json_response['erros'][0] == 'Senha incorreta'
+        assert json_response['sucesso']
 
-    def test_Login_Usuario_Inexistente(self):
+    def test_login_senha_incorreta(self):
         cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTesteee", "senha": "senha"})
+        response = cliente.post('/login', {"login": "taiskc@gmail.com", "senha": "senhaerrada"})
         json_response = response.json()
-        assert json_response['erros'][0] == 'Usuário não cadastrado'
-    
-    def test_Login_sem_senha(self):
+        assert not json_response['erros'] == 'Senha incorreta'
+        
+    def test_login_usuario_incorreto(self):
         cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTeste", "senha": ""})
+        response = cliente.post('/login', {"login": "taiskc2@gmail.com", "senha": "senhaerrada"})
         json_response = response.json()
-        assert json_response['erros'][0] == 'Senha incorreta'
-
+        assert not json_response['erros'] == 'Usuário não cadastrado'
