@@ -37,6 +37,10 @@ class TesteAtividades(object):
         with pytest.raises(Exception):
             Atividade.objects.create()     
 
+    def test_atividade_disciplina_inexistente(self):
+        with pytest.raises(Exception):
+            Atividade.objects.create(disciplina = 1)    
+
     def test_disciplina_com_usuario(self):
         atividadeTeste = Atividade.objects.create(disciplina = self.disciplinaTeste)     
         assert atividadeTeste.disciplina.usuario.nome == 'NomeTeste'
