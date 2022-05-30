@@ -34,12 +34,18 @@ class TesteAtividades(object):
         assert not valida
 
     def test_atividade_sem_disciplina(self):
-        with pytest.raises(Exception):
-            Atividade.objects.create()     
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "nome": "teste", "nota": 10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['erros'][0]['disciplina'][0] == 'Campo obrigatório'
 
     def test_atividade_disciplina_inexistente(self):
-        with pytest.raises(Exception):
-            Atividade.objects.create(disciplina = 1)    
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": -1, "nome": "teste", "nota": 10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['erros'][0]['disciplina'][0] == 'Não existe chave externa com o valor informado.'
 
     def test_disciplina_com_usuario(self):
         atividadeTeste = Atividade.objects.create(disciplina = self.disciplinaTeste)     
