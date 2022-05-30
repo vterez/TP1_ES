@@ -102,11 +102,13 @@ def CadastroAtividade(request):
             print('aqui', form.cleaned_data['nome'])
             if form.cleaned_data['nome'] in [x[0] for x in Disciplina.objects.get(pk=request.POST['disciplina']).atividades.values_list('nome')]:
                 erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
-            elif form.cleaned_data['valor'] < 0:
-                erros.append("Valor não pode ser negativo")
-            elif form.cleaned_data['nota'] > form.cleaned_data['valor']:
+            elif form.cleaned_data['valor'] <= 0:
+                erros.append("Valor não pode ser menor ou igual a zero")
+            elif form.cleaned_data['valor'] > 100:
+                erros.append("Valor não pode ser maior que 100")
+            elif form.cleaned_data['nota'] and form.cleaned_data['nota'] > form.cleaned_data['valor']:
                 erros.append("Nota não pode ser maior que o total")
-            elif form.cleaned_data['nota'] < 0:
+            elif form.cleaned_data['nota'] and form.cleaned_data['nota'] < 0:
                 erros.append("Nota não pode ser negativa")
             else:
                 atividade = form.save()

@@ -66,18 +66,55 @@ class TesteAtividades(object):
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": -10})
         json_response = response.json()
         print(json_response)
-        assert 'Valor não pode ser negativo' in json_response['erros']
-  
+        assert 'Valor não pode ser menor ou igual a zero' in json_response['erros']
+        
+    def test_atividade_valor_nulo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 0})
+        json_response = response.json()
+        print(json_response)
+        assert 'Valor não pode ser menor ou igual a zero' in json_response['erros']
+
+    def test_atividade_valor_maior_100(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 100, "valor": 101})
+        json_response = response.json()
+        print(json_response)
+        assert 'Valor não pode ser maior que 100' in json_response['erros']
+
+    def test_atividade_valor_maior_100_decimal(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 100, "valor": 100.01})
+        json_response = response.json()
+        print(json_response)
+        assert 'Valor não pode ser maior que 100' in json_response['erros']
+
+    def test_atividade_valor_igual_100(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 100, "valor": 100})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
+
+    def test_atividade_valor_3_decimais(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.03})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
+
+    def test_atividade_valor_mais_3_decimais(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.003})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['erros'][0]['valor'][0] == 'Ensure that there are no more than 2 decimal places.'
+    
     #Esse teste está falhando. Está inserindo atividade com nome maior que 100 caracteres.
     # def test_nome_atividade_maior_100(self):
     #     #with self.assertRaises(Exception):
     #     atividade = Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'Nome muito grande que gera excessão por ter tamaho maior que 100 e não passar na validação de nome da classe Atividade').save()
     #     print(len(atividade.nome))
-
-    # def test_valor_atividade_maior_que_100(self):
-    #     with self.assertRaises(Exception):
-    #         atividade = Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'teste', valor = 22).save()
-    #         print(len(atividade.valor))
             
     # def test_valor_atividade_mais_que_3_casas_decimais(self):
     #     with self.assertRaises(Exception):
