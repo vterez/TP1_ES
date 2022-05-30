@@ -38,3 +38,12 @@ class TestView(object):
         response = cliente.post('/login', {"login": "taiskc2@gmail.com", "senha": "senhaerrada"})
         json_response = response.json()
         assert not json_response['erros'] == 'Usuário não cadastrado'
+
+    def test_cadastro_disciplina_existente(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/usuario', {"usuario": self.usuarioTeste, "login": "LoginTesteee", "senha": "senha", "nome": "Teste De Software"})
+        response2 = cliente.post('/cadastro/usuario', {"usuario": self.usuarioTeste, "login": "LoginTesteee", "senha": "senha", "nome": "Teste De Software"})
+        json_response = response2.json()
+        assert json_response['erros'][0]['login'][0] == 'Já existe um objeto com esse valor'
+
+

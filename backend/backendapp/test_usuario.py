@@ -37,7 +37,7 @@ class TesteUsuario(object):
         assert usuarioTeste2.login == 'LoginTeste'
 
     def test_usuario_nome_grande(self):
-        #with self.assertRaises(ValidationError):
         usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_nome_grande',nome = 'testetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetesteteste', senha = 'senha_usuario_nome_grande')
         assert len(usuarioTeste2.nome) > 100
         usuarioTeste2.delete()
+
