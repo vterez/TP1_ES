@@ -8,6 +8,8 @@ from backendapp.models import *
 import pytest
 import unittest
 from django.test import Client
+from django.utils import timezone
+from datetime import datetime, timedelta
 
 class TesteAtividades(object):
 
@@ -100,7 +102,20 @@ class TesteAtividades(object):
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.003})
         json_response = response.json()
         assert json_response['erros'][0]['valor'][0] == 'Ensure that there are no more than 2 decimal places.'
+
+    def test_atividade_data_passada(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date() - timedelta(1)})
+        json_response = response.json()
+        assert 'Data da atividade não pode ser passada' in json_response['erros']
     
+    def test_atividade_data_atual(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date()})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
+
     #Esse teste está falhando. Está inserindo atividade com nome maior que 100 caracteres.
     # def test_nome_atividade_maior_100(self):
     #     #with self.assertRaises(Exception):

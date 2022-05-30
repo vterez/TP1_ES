@@ -7,6 +7,7 @@ from hashlib import blake2s as khash
 from copy import copy
 from django.http import QueryDict
 from django.utils import timezone
+from datetime import datetime
 
 
 @acerta_tipo("POST")
@@ -103,6 +104,8 @@ def CadastroAtividade(request):
                 erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
             elif form.cleaned_data['nota'] and form.cleaned_data['nota'] > form.cleaned_data['valor']:
                 erros.append("Nota não pode ser maior que o total")
+            elif form.cleaned_data['data'] and datetime.date(form.cleaned_data['data']) < timezone.now().date():
+                erros.append("Data da atividade não pode ser passada")
             else:
                 atividade = form.save()
                 return_dict["id"] = atividade.id
