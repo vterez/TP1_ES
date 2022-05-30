@@ -8,6 +8,8 @@ from backendapp.models import *
 import pytest
 import unittest
 from django.test import Client
+from django.utils import timezone
+from datetime import datetime, timedelta
 
 class TesteAtividades(object):
 
@@ -32,8 +34,18 @@ class TesteAtividades(object):
         assert not valida
 
     def test_atividade_sem_disciplina(self):
-        with pytest.raises(Exception):
-            Atividade.objects.create()     
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "nome": "teste", "nota": 10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['erros'][0]['disciplina'][0] == 'Campo obrigatório'
+
+    def test_atividade_disciplina_inexistente(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": -1, "nome": "teste", "nota": 10, "valor": 10})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['erros'][0]['disciplina'][0] == 'Não existe chave externa com o valor informado.'
 
     def test_disciplina_com_usuario(self):
         atividadeTeste = Atividade.objects.create(disciplina = self.disciplinaTeste)     
@@ -100,29 +112,59 @@ class TesteAtividades(object):
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.003})
         json_response = response.json()
         assert json_response['erros'][0]['valor'][0] == 'Ensure that there are no more than 2 decimal places.'
+
+    def test_atividade_data_passada(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date() - timedelta(1)})
+        json_response = response.json()
+        assert 'Data da atividade não pode ser passada' in json_response['erros']
+   
+    def test_atividade_data_atual(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date()})
+        json_response = response.json()
+        assert json_response['sucesso']
     
-    def test_nome_atividade_menor_5(self):
+    def test_atividade_counteudos_pequeno(self):
         cliente = Client()
-        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "test"})
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "1234"})
         json_response = response.json()
-        assert json_response['erros'][0]['nome'][0] == 'Ensure this value has at least 5 characters (it has 4).'
-
-    def test_nome_atividade_maior_20(self):
+        assert "Ensure this value has at least 5 characters" in json_response ['erros'][0]['conteudos'][0]
+    
+    def test_atividade_conteudos_grande(self):
         cliente = Client()
-        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "Atividade com nome muito grande"})
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "Conteudos com bem mais que a quantidade máxima de 20 caracteres."})
         json_response = response.json()
-        assert json_response['erros'][0]['nome'][0] == 'Ensure this value has at most 20 characters (it has 31).'
+        assert "Ensure this value has at most 20 characters" in json_response ['erros'][0]['conteudos'][0]
 
-    def test_conteudo_menor_que_5(self):
+    def test_atividade_conteudos_tamanho_minimo(self):
         cliente = Client()
-        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "conteudos": "2359"})
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "12345"})
         json_response = response.json()
-        assert json_response['erros'][0]['conteudos'][0] == 'Ensure this value has at least 5 characters (it has 4).'
+        assert json_response['sucesso']
 
-    def test_conteudo_maior_que_20(self):
+    def test_atividade_conteudos_tamanho_maximo(self):
         cliente = Client()
-        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "conteudos": "tenho que terminar o tp até as 23:59 de hoje"})
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "Conteudos c/ 20 c..."})
         json_response = response.json()
-        assert json_response['erros'][0]['conteudos'][0] == 'Ensure this value has at most 20 characters (it has 44).'
+        print(json_response)
+        assert json_response['sucesso']
 
+    def test_atividade_nome_grande(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "nome com bem mais que a quantidade máxima de 20 caracteres."})
+        json_response = response.json()
+        assert "Ensure this value has at most 20 characters" in json_response ['erros'][0]['nome'][0]
 
+    def test_atividade_nome_tamanho_minimo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "12345"})
+        json_response = response.json()
+        assert json_response['sucesso']
+
+    def test_atividade_nome_tamanho_maximo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "nome c/ 20 c..."})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
