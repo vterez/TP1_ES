@@ -113,30 +113,48 @@ class TesteAtividades(object):
         cliente = Client()
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date()})
         json_response = response.json()
+        assert json_response['sucesso']
+    
+    def test_atividade_counteudos_pequeno(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "1234"})
+        json_response = response.json()
+        assert "Ensure this value has at least 5 characters" in json_response ['erros'][0]['conteudos'][0]
+    
+    def test_atividade_conteudos_grande(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "Conteudos com bem mais que a quantidade máxima de 20 caracteres."})
+        json_response = response.json()
+        assert "Ensure this value has at most 20 characters" in json_response ['erros'][0]['conteudos'][0]
+
+    def test_atividade_conteudos_tamanho_minimo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "12345"})
+        json_response = response.json()
+        assert json_response['sucesso']
+
+    def test_atividade_conteudos_tamanho_maximo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "conteudos": "Conteudos c/ 20 c..."})
+        json_response = response.json()
         print(json_response)
         assert json_response['sucesso']
 
-    #Esse teste está falhando. Está inserindo atividade com nome maior que 100 caracteres.
-    # def test_nome_atividade_maior_100(self):
-    #     #with self.assertRaises(Exception):
-    #     atividade = Atividade.objects.create(disciplina = self.disciplinaTeste, nome = 'Nome muito grande que gera excessão por ter tamaho maior que 100 e não passar na validação de nome da classe Atividade').save()
-    #     print(len(atividade.nome))
-            
-    # def test_valor_atividade_mais_que_3_casas_decimais(self):
-    #     with self.assertRaises(Exception):
-    #         Atividade(nome = 'teste', valor = 2.222).save()    
+    def test_atividade_nome_grande(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "nome com bem mais que a quantidade máxima de 20 caracteres."})
+        json_response = response.json()
+        assert "Ensure this value has at most 20 characters" in json_response ['erros'][0]['nome'][0]
 
-    # def test_nota_atividade_maior_ou_igual_a_mil(self):
-    #     with self.assertRaises(Exception):
-    #         Atividade(nome = 'teste', valor = 100000).save()
+    def test_atividade_nome_tamanho_minimo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "12345"})
+        json_response = response.json()
+        assert json_response['sucesso']
 
-    # def test_nota_atividade_mais_que_3_casas_decimais(self):
-    #     usuarioTeste = Usuario(login = 'Teste', nome = 'Teste', email = '', senha = 'Teste').save()
-    #     disciplinaTeste = Disciplina(usuario = usuarioTeste).save()
-    #     with self.assertRaises(Exception):
-    #         Atividade(disciplina = disciplinaTeste, nome = 'teste', valor = 2.222).save() 
-
-    # def test_conteudo_mais_que_255_caracteres(self):
-    #     with self.assertRaises(Exception):
-    #         Atividade(conteudos = 'teste').save() 
-
+    def test_atividade_nome_tamanho_maximo(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nota": 12, "valor": 15, "nome": "nome c/ 20 c..."})
+        json_response = response.json()
+        print(json_response)
+        assert json_response['sucesso']
