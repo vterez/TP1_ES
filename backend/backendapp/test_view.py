@@ -13,12 +13,12 @@ from django.urls import reverse
 from django.http import HttpRequest
 
 
-class TestView(unittest.TestCase):
+class TestView(object):
 
-    def setUp(self):
+    def setup_method(self):
         self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'LoginTeste', senha = 'teste')
 
-    def tearDown(self):
+    def teardown_method(self):
         self.usuarioTeste.delete()
 
     def test_login_correto(self):
