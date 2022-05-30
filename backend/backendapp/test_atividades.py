@@ -96,14 +96,14 @@ class TesteAtividades(object):
         print(json_response)
         assert json_response['sucesso']
 
-    def test_atividade_valor_3_decimais(self):
+    def test_atividade_valor_2_decimais(self):
         cliente = Client()
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.03})
         json_response = response.json()
         print(json_response)
         assert json_response['sucesso']
 
-    def test_atividade_valor_mais_3_decimais(self):
+    def test_atividade_valor_mais_2_decimais(self):
         cliente = Client()
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "valor": 10.003})
         json_response = response.json()
