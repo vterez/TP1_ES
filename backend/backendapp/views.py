@@ -101,6 +101,8 @@ def CadastroAtividade(request):
         if form.is_valid():
             if form.cleaned_data['nome'] in [x[0] for x in Disciplina.objects.get(pk=request.POST['disciplina']).atividades.values_list('nome')]:
                 erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
+            elif form.cleaned_data['nota'] and form.cleaned_data['nota'] > form.cleaned_data['valor']:
+                erros.append("Nota não pode ser maior que o total")
             else:
                 atividade = form.save()
                 return_dict["id"] = atividade.id

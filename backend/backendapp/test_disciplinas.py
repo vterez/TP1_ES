@@ -8,6 +8,7 @@ from backendapp.models import *
 import pytest
 from django.test import Client
 import unittest
+from django.test import Client
 
 class TesteDisciplina(object):
     def setup_method(self):
@@ -26,10 +27,15 @@ class TesteDisciplina(object):
         disciplinaTeste.delete()
     
     def test_disciplina_carga_horario_menor_que_15(self):
-            cliente = Client()
-            response = cliente.post('/cadastro/disciplina', {"carga_horaria": 12})
-            json_response = response.json()
-            assert json_response['erros'][0]['carga_horaria'][0] == 'Ensure this value is greater than or equal to 15.'
+        cliente = Client()
+        response = cliente.post('/cadastro/disciplina', {"carga_horaria": 12})
+        json_response = response.json()
+        assert json_response['erros'][0]['carga_horaria'][0] == 'Ensure this value is greater than or equal to 15.'
+
+    # def test_numero_sala_menor_que_1000(self):
+    #     with self.assertRaises(Exception):
+    #         disciplinaTeste = Disciplina.objects.create(usuario = self.usuarioTeste, sala = 12).save()
+    #         disciplinaTeste.delete()
 
     def test_disciplina_carga_horario_maior_que_90(self):
         cliente = Client()
