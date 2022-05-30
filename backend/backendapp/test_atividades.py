@@ -10,6 +10,7 @@ import unittest
 from django.test import Client
 from django.utils import timezone
 from datetime import datetime, timedelta
+from django.forms.models import model_to_dict
 
 class TesteAtividades(object):
 
@@ -168,3 +169,21 @@ class TesteAtividades(object):
         json_response = response.json()
         print(json_response)
         assert json_response['sucesso']
+
+    def test_lista_atividades(self):
+        self.atividadeTeste = Atividade.objects.create(nome = 'Atividade Teste', disciplina = self.disciplinaTeste, valor = 20)
+        self.outraAtividadeTeste = Atividade.objects.create(nome = 'Outra Atividade Teste', disciplina = self.disciplinaTeste, valor = 30)
+        cliente = Client()
+        response = cliente.get('/lista/atividades/' + str(self.usuarioTeste.id))
+        json_response = response.json()
+        self.atividadeTeste.delete()
+        self.outraAtividadeTeste.delete()
+        lista_atividades = [model_to_dict(self.atividadeTeste), model_to_dict(self.outraAtividadeTeste)]
+        assert json_response['sucesso'] # faltando consertar com os ids corretos
+        # assert json_response['atividades'] == lista_atividades
+
+    def test_lista_atividades_vazia(self):
+        cliente = Client()
+        response = cliente.get('/lista/atividades/' + str(self.usuarioTeste.id))
+        json_response = response.json()
+        assert json_response['atividades'] == []
