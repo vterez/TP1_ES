@@ -13,22 +13,30 @@ from django.urls import reverse
 from django.http import HttpRequest
 
 
-class TestView(unittest.TestCase):
+class TestView(object):
 
-    def setUp(self):
+    def setup_method(self):
         self.usuarioTeste = Usuario.objects.create(login = 'LoginTeste', nome = 'LoginTeste', senha = 'teste')
 
-    def tearDown(self):
+    def teardown_method(self):
         self.usuarioTeste.delete()
 
-    def test_Login_Correto(self):
-        cliente = Client()
-        response = cliente.post('/login', {"login": "LoginTeste", "senha": "teste"})
-        json_response = response.json()
-        assert json_response['sucesso']
 
     def test_Login_Incorreto(self):
         cliente = Client()
         response = cliente.post('/login', {"login": "LoginTeste", "senha": "senhaerrada"})
         json_response = response.json()
-        assert not json_response['sucesso']
+        assert json_response['erros'][0] == 'Senha incorreta'
+
+    def test_Login_Usuario_Inexistente(self):
+        cliente = Client()
+        response = cliente.post('/login', {"login": "LoginTesteee", "senha": "senha"})
+        json_response = response.json()
+        assert json_response['erros'][0] == 'Usuário não cadastrado'
+    
+    def test_Login_sem_senha(self):
+        cliente = Client()
+        response = cliente.post('/login', {"login": "LoginTeste", "senha": ""})
+        json_response = response.json()
+        assert json_response['erros'][0] == 'Senha incorreta'
+
