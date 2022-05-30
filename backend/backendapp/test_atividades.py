@@ -118,7 +118,7 @@ class TesteAtividades(object):
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date() - timedelta(1)})
         json_response = response.json()
         assert 'Data da atividade não pode ser passada' in json_response['erros']
-    
+   
     def test_atividade_data_atual(self):
         cliente = Client()
         response = cliente.post('/cadastro/atividade', {"usuario": self.usuarioTeste.id, "disciplina": self.disciplinaTeste.id, "nome": "teste", "nota": 12, "valor": 15, "data": timezone.now().date()})

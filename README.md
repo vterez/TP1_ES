@@ -3,9 +3,9 @@
 
 ## Membros do grupo
 
-* Diego
+* Diego Della Rocca de Camargos
 * Marco Túlio Machado França - 2016045820
-* Taís
+* Taís Christofani - 2020420648
 
 ## Funcionalidades
 

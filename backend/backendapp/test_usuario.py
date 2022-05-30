@@ -6,8 +6,7 @@ import django
 django.setup()
 from backendapp.models import *
 import pytest
-import unittest
-
+from django.test import Client
 class TesteUsuario(object):
 
     def setup_method(self):
@@ -32,12 +31,30 @@ class TesteUsuario(object):
             usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_com_senha_vazia', nome = 'nome_usuario_com_senha_vazia', senha = None)
             usuarioTeste2.delete()
 
-    def test_usuario_correto(self):
-        usuarioTeste2 = self.usuarioTeste
-        assert usuarioTeste2.login == 'LoginTeste'
+    def test_usuario_foi_criado(self):
+        assert self.usuarioTeste.login == 'LoginTeste'
+
 
     def test_usuario_nome_grande(self):
-        #with self.assertRaises(ValidationError):
-        usuarioTeste2 = Usuario.objects.create(login = 'Login_usuario_nome_grande',nome = 'testetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetesteteste', senha = 'senha_usuario_nome_grande')
-        assert len(usuarioTeste2.nome) > 100
-        usuarioTeste2.delete()
+        cliente = Client()
+        response = cliente.post('/cadastro/usuario', {"login": 'login', "senha":'senhateste', "nome": 'testetetetestetestetestetesteteste'})
+        json_response = response.json()
+        assert json_response['erros'][0]['nome'][0] == 'Ensure this value has at most 20 characters (it has 34).'
+
+    def test_usuario_nome_incompleto(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/usuario', {"login": 'login', "senha":'senhateste', "nome": 'oi'})
+        json_response = response.json()
+        assert json_response['erros'][0]['nome'][0] == 'Ensure this value has at least 5 characters (it has 2).'
+
+    def test_login_pequeno(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/usuario', {"login": 'ab', "senha":'senhateste', "nome": 'senhafraca'})
+        json_response = response.json()
+        assert json_response['erros'][0]['login'][0] == 'Ensure this value has at least 5 characters (it has 2).'
+
+    def test_login_pequeno(self):
+        cliente = Client()
+        response = cliente.post('/cadastro/usuario', {"login": 'login_com_mais_caracteres_que_o_permitido', "senha":'senhateste', "nome": 'senhafraca'})
+        json_response = response.json()
+        assert json_response['erros'][0]['login'][0] == 'Ensure this value has at most 20 characters (it has 41).'
