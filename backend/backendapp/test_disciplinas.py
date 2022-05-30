@@ -73,3 +73,15 @@ class TesteDisciplina(object):
         response = cliente.post('/cadastro/disciplina', {"professor": 'André Bruno Carlos Daniel Erica Fernanda Gabriela Hugo'})
         json_response = response.json()
         assert json_response['erros'][0]['professor'][0] == 'Ensure this value has at most 50 characters (it has 54).'
+
+    def test_lista_disciplinas_vazia(self):
+        cliente = Client()
+        response = cliente.get('/lista/disciplinas/' + str(self.usuarioTeste.id))
+        json_response = response.json()
+        assert json_response['disciplinas'] == []
+
+    def test_lista_disciplinas_usuario_invalido(self):
+        cliente = Client()
+        response = cliente.get('/lista/disciplinas/' + str(0))
+        json_response = response.json()
+        assert 'Não existe usuário com esse id' in json_response['erros']
