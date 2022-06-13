@@ -14,3 +14,7 @@ def acerta_tipo(tipo):
         return wrapper
     return acerta_tipo_base
 
+def nota_valida(nota, total):
+    if nota > total:
+        return False
+    return True

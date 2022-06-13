@@ -20,7 +20,7 @@ const Disciplinas = () => {
 
   const fetchList = useCallback(() => {
     fetch(
-      `https://928c-20-102-59-234.sa.ngrok.io/lista/disciplinas/${auth.userId}`
+      `http://127.0.0.1:8000/lista/disciplinas/${auth.userId}`
     )
       .then((res) => res.json())
       .then((res) => {
@@ -46,7 +46,7 @@ const Disciplinas = () => {
 
   const deleteHandler = useCallback(
     (id) => {
-      fetch(`https://928c-20-102-59-234.sa.ngrok.io/remove/disciplina/${id}`, {
+      fetch(`http://127.0.0.1:8000/remove/disciplina/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())

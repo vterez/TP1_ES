@@ -101,6 +101,8 @@ def CadastroAtividade(request):
         if form.is_valid():
             if form.cleaned_data['nome'] in [x[0] for x in Disciplina.objects.get(pk=request.POST['disciplina']).atividades.values_list('nome')]:
                 erros.append("Já existe uma atividade com esse nome para a disciplina informada.")
+            elif form.cleaned_data['nota'] and form.cleaned_data['nota'] > form.cleaned_data['valor']:
+                erros.append("Nota não pode ser maior que o total")
             else:
                 atividade = form.save()
                 return_dict["id"] = atividade.id
@@ -235,16 +237,20 @@ def AtualizaAtividade(request,atividade_id):
     erros = []
 
     try:
-        dados = QueryDict(request.body)
-        atividade = Atividade.objects.get(id=atividade_id)
-        post = copy(dados)
-        for k,v in model_to_dict(atividade).items():
-            if k not in dados: post[k] = v
-        form = AtividadeForm(post,instance=atividade)
-        if form.is_valid():
-            form.save()
+        valida = nota_valida(request.data['nota'], request.data['valor'])
+        if valida:
+            dados = QueryDict(request.body)
+            atividade = Atividade.objects.get(id=atividade_id)
+            post = copy(dados)
+            for k,v in model_to_dict(atividade).items():
+                if k not in dados: post[k] = v
+            form = AtividadeForm(post,instance=atividade)
+            if form.is_valid():
+                form.save()
+            else:
+                erros.append(form.errors)
         else:
-            erros.append(form.errors)
+            raise Exception("Nota não pode ser maior que o valor total")
 
     except Atividade.DoesNotExist:
         erros.append("Não existe atividade com o código informado")  

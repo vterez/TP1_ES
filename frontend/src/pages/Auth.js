@@ -58,13 +58,14 @@ const Auth = () => {
         })}
         onSubmit={(values, actions) => {
           const address = signup ? "cadastro/usuario" : "login";
-          fetch(`https://928c-20-102-59-234.sa.ngrok.io/${address}`, {
+          fetch(`http://127.0.0.1:8000/${address}`, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: encode(values),
           })
             .then((res) => res.json())
             .then((res) => {
+              debugger;
               if (res["sucesso"]) {
                 if (signup) {
                   setSignup(false);
@@ -85,6 +86,7 @@ const Auth = () => {
               }
             })
             .catch((err) => {
+              debugger;
               console.log(err);
             });
         }}
