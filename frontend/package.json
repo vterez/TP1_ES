@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "^1.13.3"
+    "babel-plugin-styled-components": "^1.13.3",
+    "cypress": "^10.2.0"
   }
 }
