@@ -7,13 +7,3 @@ module.exports = defineConfig({
     },
   },
 });
-
-module.exports = async (on, config) => {
-  const db = await Db.connect()
-  on('task', {
-      async createUser(userData) {
-          const result = await db.collection('users').insertOne(userData)
-          return result
-      }
-  })
-}
