@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 describe('Register', () => {
     before(() => {
         cy.request('DELETE', 'http://127.0.0.1:8000/remove/usuario/test_user')
@@ -56,35 +55,6 @@ describe('Login', () => {
     })
 })
 describe('Discipline', () => {
-    it('creates and delete a discipline', () => {
-        cy.visit('http://localhost:3000')
-        cy.get('input[name="login"]')
-            .type('teste')
-            .get('input[name="senha"]')
-            .type('abc123')
-        cy.contains('Login', ).click()
-        cy.get('[type^=button]').eq(0).click()
-        cy.get('input[name="nome"]')
-        .type('Teste de Software')
-        .should('have.value','Teste de Software')
-        .get('input[name="professor"]')
-        .type('Andre Hora')
-        .should('have.value','Andre Hora')
-        .get('input[name="sala"]')
-        .type('2022')
-        .should('have.value','2022')
-        .get('input[name="horario"]')
-        .type('19h')
-        .should('have.value','19h')
-        .get('input[name="carga_horaria"]')
-        .type('60')
-        .should('have.value','60')
-        cy.get('[type^=submit]').click()
-        cy.contains('Disciplinas').click()
-        cy.contains('Deletar').should('exist')
-        cy.contains('Editar').should('exist')
-        cy.get('[type^=button]').eq(2).click()
-    })
     it('create and delete a discipline', () => {
         cy.visit('http://localhost:3000')
         cy.get('input[name="login"]')
