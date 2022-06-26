@@ -38,6 +38,8 @@ describe('Register', () => {
         cy.contains('Cadastrar', ).click()
         cy.contains('Já existe um objeto com esse valor').should('exist', 'sc-jSMfEi gKnknu')
     })
+})
+describe('Login', () => {
     it('login, logout and back to home', () => {
         cy.visit('http://localhost:3000')
         cy.get('input[name="login"]')
@@ -50,6 +52,8 @@ describe('Register', () => {
         cy.contains('Cadastrar').should('exist')
 
     })
+})
+describe('Discipline', () => {
     it('create and delete a discipline', () => {
         cy.visit('http://localhost:3000')
         cy.get('input[name="login"]')
@@ -80,6 +84,8 @@ describe('Register', () => {
         cy.get('*[class^="sc-dkPtRN ilFaUK"]').click()
 
     })
+})
+describe('Activity', () => {
     it('create an activity', () => {
         cy.visit('http://localhost:3000')
         cy.get('input[name="login"]')
