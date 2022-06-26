@@ -18,7 +18,7 @@ describe('Register', () => {
             .type('Test User')
             .should('have.value','Test User')
         cy.contains('Cadastrar', ).click()
-        cy.contains('Login').should('have.class', 'sc-dkzDqf ksXaKt')
+        cy.contains('Login').should('have.class', 'sc-dkPtRN kYGPUm')
         })
     it('fail to register repeated user', () => {
         cy.visit('http://localhost:3000')
