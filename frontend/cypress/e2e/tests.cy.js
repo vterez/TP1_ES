@@ -126,6 +126,5 @@ describe('Activity', () => {
         .type('Testes')
         .should('have.value','Testes')
         cy.get('[type^=submit]').click()
-
     })
 })
